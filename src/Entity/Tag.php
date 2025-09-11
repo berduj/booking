@@ -41,11 +41,18 @@ class Tag implements SortableEntityInterface, \Stringable
     #[ORM\Column(length: 255)]
     private string $type = self::TYPE_STRUCTURE;
 
+    /**
+     * @var Collection<int, Personne>
+     */
+    #[ORM\ManyToMany(targetEntity: Personne::class, mappedBy: 'tags')]
+    private Collection $personnes;
+
 
     public function __construct(string $type)
     {
         $this->setType($type);
         $this->structures = new ArrayCollection();
+        $this->personnes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,6 +115,33 @@ class Tag implements SortableEntityInterface, \Stringable
             throw new \InvalidArgumentException(sprintf('Le type "%s" n\'est pas valide.', $type));
         }
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Personne>
+     */
+    public function getPersonnes(): Collection
+    {
+        return $this->personnes;
+    }
+
+    public function addPersonne(Personne $personne): static
+    {
+        if (!$this->personnes->contains($personne)) {
+            $this->personnes->add($personne);
+            $personne->addTag($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersonne(Personne $personne): static
+    {
+        if ($this->personnes->removeElement($personne)) {
+            $personne->removeTag($this);
+        }
 
         return $this;
     }

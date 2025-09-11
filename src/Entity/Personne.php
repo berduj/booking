@@ -131,6 +131,12 @@ class Personne implements \Stringable, GeocodableInterface, UserPersonneInterfac
     #[ORM\OneToMany(targetEntity: Alerte::class, mappedBy: 'auteur')]
     private Collection $auteurAlertes;
 
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'personnes')]
+    private Collection $tags;
+
     public function __construct()
     {
         $this->structures = new ArrayCollection();
@@ -140,6 +146,7 @@ class Personne implements \Stringable, GeocodableInterface, UserPersonneInterfac
         $this->personneWidgets = new ArrayCollection();
         $this->auteur = new ArrayCollection();
         $this->auteurAlertes = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -617,5 +624,29 @@ class Personne implements \Stringable, GeocodableInterface, UserPersonneInterfac
         }
 
         return null;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        $this->tags->removeElement($tag);
+
+        return $this;
     }
 }

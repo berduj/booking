@@ -8,6 +8,7 @@ use App\Entity\DepartementDomaine;
 use App\Entity\Personne;
 use App\Entity\Profil;
 use App\Entity\Service;
+use App\Entity\Tag;
 use App\Form\Type\OuiNonType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -74,6 +75,20 @@ class PersonneType extends AbstractType
             ->add('codePostal', TextType::class, ['label' => 'Code postal', 'required' => false])
             ->add('commune', TextType::class, ['label' => 'Commune', 'required' => false])
             ->add('pays', TextType::class, ['label' => 'Pays', 'required' => false])
+            ->add('tags', EntityType::class, [
+                'label' => 'Tags',
+                'expanded' => true,
+                'multiple' => true,
+                'attr' => ['class' => 'select-multiple-bordered select-multiple-3cols'],
+                'class' => Tag::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('t')
+                        ->andWhere('t.type = :type')
+                        ->setParameter('type', Tag::TYPE_PERSONNE)
+                        ->andWhere('t.enabled = true')
+                        ->orderBy('t.sortable', 'ASC');
+                },
+            ])
             ->add('enabled', OuiNonType::class, ['label' => 'Activé']);
 
         if (!$this->security->isGranted('ROLE_USER_EDIT')) {

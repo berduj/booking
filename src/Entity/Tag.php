@@ -22,7 +22,8 @@ class Tag implements SortableEntityInterface, \Stringable
 
     public const TYPE_STRUCTURE = 'Structure';
     public const TYPE_PERSONNE = 'Personne';
-    public const TYPES = [self::TYPE_STRUCTURE, self::TYPE_PERSONNE];
+    public const TYPE_ARTISTE = 'Artiste';
+    public const TYPES = [self::TYPE_STRUCTURE, self::TYPE_PERSONNE, self::TYPE_ARTISTE];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -47,12 +48,18 @@ class Tag implements SortableEntityInterface, \Stringable
     #[ORM\ManyToMany(targetEntity: Personne::class, mappedBy: 'tags')]
     private Collection $personnes;
 
+    /**
+     * @var Collection<int, Artiste>
+     */
+    #[ORM\ManyToMany(targetEntity: Artiste::class, mappedBy: 'tags')]
+    private Collection $artistes;
 
     public function __construct(string $type)
     {
         $this->setType($type);
         $this->structures = new ArrayCollection();
         $this->personnes = new ArrayCollection();
+        $this->artistes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,6 +148,33 @@ class Tag implements SortableEntityInterface, \Stringable
     {
         if ($this->personnes->removeElement($personne)) {
             $personne->removeTag($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Artiste>
+     */
+    public function getArtistes(): Collection
+    {
+        return $this->artistes;
+    }
+
+    public function addArtiste(Artiste $artiste): static
+    {
+        if (!$this->artistes->contains($artiste)) {
+            $this->artistes->add($artiste);
+            $artiste->addTag($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArtiste(Artiste $artiste): static
+    {
+        if ($this->artistes->removeElement($artiste)) {
+            $artiste->removeTag($this);
         }
 
         return $this;

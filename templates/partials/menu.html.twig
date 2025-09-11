@@ -23,6 +23,12 @@
                             <a class="nav-link" href="{{ path('app_personne_index') }}">Personnes</a>
                         </li>
                     {% endif %}
+                    {% if is_granted('ROLE_ARTISTE_VIEW') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_artiste_index') }}">Artistes</a>
+                        </li>
+                    {% endif %}
+
                     {% if is_granted('ROLE_CONTACT_VIEW') %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_contact_index') }}">Contacts</a>

@@ -137,6 +137,12 @@ class Personne implements \Stringable, GeocodableInterface, UserPersonneInterfac
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'personnes')]
     private Collection $tags;
 
+    /**
+     * @var Collection<int, Artiste>
+     */
+    #[ORM\ManyToMany(targetEntity: Artiste::class, mappedBy: 'personnes')]
+    private Collection $artistes;
+
     public function __construct()
     {
         $this->structures = new ArrayCollection();
@@ -147,6 +153,7 @@ class Personne implements \Stringable, GeocodableInterface, UserPersonneInterfac
         $this->auteur = new ArrayCollection();
         $this->auteurAlertes = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->artistes = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -646,6 +653,33 @@ class Personne implements \Stringable, GeocodableInterface, UserPersonneInterfac
     public function removeTag(Tag $tag): static
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Artiste>
+     */
+    public function getArtistes(): Collection
+    {
+        return $this->artistes;
+    }
+
+    public function addArtiste(Artiste $artiste): static
+    {
+        if (!$this->artistes->contains($artiste)) {
+            $this->artistes->add($artiste);
+            $artiste->addPersonne($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArtiste(Artiste $artiste): static
+    {
+        if ($this->artistes->removeElement($artiste)) {
+            $artiste->removePersonne($this);
+        }
 
         return $this;
     }

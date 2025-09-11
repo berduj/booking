@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Artistes{% endblock %}
+
+{% block body %}
+    <h1>
+        <picto class="artiste-picto"></picto>
+        Artistes
+    </h1>
+    {% include 'partials/alphabetical_pager.html.twig' with { route: 'app_artiste_index_page', 'active_letter': active_page, route_parameters: {} } %}
+    {% include 'partials/enabled_disabled_all_filter.html.twig' with { route: 'app_artiste_index_status', 'status': status, route_parameters: {} } %}
+
+    {% if is_granted('ROLE_ARTISTE_CREATE') %}
+        <div class="row mb-2">
+            <div class="col-6">
+                <a href="{{ path('app_artiste_new') }}" class="btn btn-primary btn-sm btn-add">ajouter</a>
+            </div>
+        </div>
+    {% endif %}
+
+    <table class="table table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Nom</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for artiste in artistes %}
+            <tr>
+                <td class="{{ artiste.enabled?"on":"off" }}"></td>
+                <td>{{ artiste.nom }}  </td>
+                <td>
+                    {% if is_granted('VIEW', artiste) %}
+                        <a href="{{ path('app_artiste_show', {'id': artiste.id}) }}" class="btn btn-primary btn-sm btn-show">voir</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if is_granted('ROLE_ARTISTE_CREATE') %}
+        <a href="{{ path('app_artiste_new') }}" class="btn btn-primary btn-sm btn-add">ajouter</a>
+    {% endif %}
+{% endblock %}

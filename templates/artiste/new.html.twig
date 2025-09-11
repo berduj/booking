@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle artiste{% endblock %}
+
+{% block body %}
+    <h1><picto class="artiste-picto"></picto>Nouvelle artiste</h1>
+
+    {{ include('artiste/_form.html.twig') }}
+
+{% endblock %}

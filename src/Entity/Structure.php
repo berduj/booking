@@ -323,8 +323,6 @@ class Structure implements \Stringable, GeocodableInterface
         return $this;
     }
 
-
-
     /**
      * @return Collection<int, Personne>
      */

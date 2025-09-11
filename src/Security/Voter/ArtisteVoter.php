@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Security\Voter;
 
-use App\Entity\Structure;
+use App\Entity\Artiste;
 use App\Security\UserPersonneInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
- * @extends Voter<string, Structure>
+ * @extends Voter<string, Artiste>
  */
-class StructureVoter extends Voter
+class ArtisteVoter extends Voter
 {
+    public const DELETE = 'DELETE';
     public const EDIT = 'EDIT';
     public const VIEW = 'VIEW';
-    public const DELETE = 'DELETE';
 
     public function __construct(private readonly Security $security)
     {
@@ -26,7 +26,7 @@ class StructureVoter extends Voter
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::EDIT, self::VIEW, self::DELETE])
-            && $subject instanceof Structure;
+            && $subject instanceof Artiste;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -48,26 +48,26 @@ class StructureVoter extends Voter
         return false;
     }
 
-    private function handleEdit(Structure $subject, UserPersonneInterface $user): bool
+    private function handleEdit(Artiste $subject, UserPersonneInterface $user): bool
     {
-        if ($subject->isAdminOnly()) {
-            return $this->security->isGranted('ROLE_ADMIN');
-        }
-
-        if ($this->security->isGranted('ROLE_STRUCTURE_EDIT')) {
+        if ($this->security->isGranted('ROLE_ARTISTE_EDIT')) {
             return true;
         }
 
         return false;
     }
 
-    private function handleView(Structure $subject, UserPersonneInterface $user): bool
+    private function handleView(Artiste $subject, UserPersonneInterface $user): bool
     {
-        return $this->security->isGranted('ROLE_STRUCTURE_VIEW');
+        if ($user === $subject) {
+            return true;
+        }
+
+        return $this->security->isGranted('ROLE_ARTISTE_VIEW');
     }
 
-    private function handleDelete(Structure $subject, UserPersonneInterface $user): bool
+    private function handleDelete(Artiste $subject, UserPersonneInterface $user): bool
     {
-        return $this->security->isGranted('ROLE_STRUCTURE_DELETE');
+        return $this->security->isGranted('ROLE_ARTISTE_DELETE');
     }
 }

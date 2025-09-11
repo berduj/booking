@@ -1,0 +1,37 @@
+
+        <div class="col-md-6 col-sm-12 small">
+            <div class="card mb-3 action-contacts">
+                <div class="card-header ">
+                    <div class="row">
+                        <div class="col-6">
+                            {{ contact.date.format('d/m/Y') }} <br/>
+                            {{ contact.modaliteContact }}
+                        </div>
+                        <div class="col-6 text-right">
+                            {{ contact.auteur }}<br/>
+                            <a href="{{ path('app_contact_show', {id:contact.id}) }}" class="float-end">voir</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body mb-1">
+                    <h6 class="card-title">{{ contact.titre }}</h6>
+                    <p class="card-text ">{{ contact.compteRendu |nl2br }}</p>
+
+                </div>
+                {% if contact.filename %}
+                    <div class="card-body">
+                        Fichier joint : <a href="{{ path('app_contact_view_document', { contact: contact.id}) }}" target="_blank">voir</a>
+                    </div>
+                {% endif %}
+
+                <div class="card-footer ">
+                    {% for interlocuteur in contact.interlocuteurs %}
+                        <div class="row">
+                            <div class="col-6">{{ interlocuteur.personne }}</div>
+                            <div class="col-6">{{ interlocuteur.structure }}</div>
+                        </div>
+                    {% endfor %}
+                    {{ contact.autresInterlocuteurs |nl2br }}
+                </div>
+            </div>
+        </div>

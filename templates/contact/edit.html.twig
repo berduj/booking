@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier contact{% endblock %}
+
+{% block body %}
+    <h1><picto class="contact-picto"></picto>Modifier contact <span>{{ contact }}</span></h1>
+
+    {{ include('contact/_form.html.twig') }}
+    {{ include('contact/_delete_form.html.twig') }}
+{% endblock %}

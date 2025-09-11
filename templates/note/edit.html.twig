@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier note{% endblock %}
+
+{% block body %}
+    <h1>Modifier note</h1>
+
+    {{ include('note/_form.html.twig') }}
+    {{ include('note/_delete_form.html.twig') }}
+{% endblock %}

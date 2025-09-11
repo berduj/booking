@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Département/Domaine{% endblock %}
+
+{% block body %}
+    <h1>Département/Domaine <span>{{ departementDomaine }}</span></h1>
+
+    <div class="tab-content mt-3" id="nav-tabContent">
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Libellé</th>
+                <td>{{ departementDomaine.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Activé</th>
+                <td>{{ departementDomaine.enabled ?"Oui":"Non" }}</td>
+            </tr>
+            <tr>
+                <th>Création</th>
+                <td>{{ departementDomaine.createdByAt }}</td>
+            </tr>
+            <tr>
+                <th>Dernière modification</th>
+                <td>{{ departementDomaine.updatedByAt }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ departementDomaine.id }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_departementDomaine_edit', {'id': departementDomaine.id}) }}" class="btn btn-sm btn-primary  btn-edit">modifier</a>
+        <a href="{{ path('app_departementDomaine_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+        {{ include('parametres/departementDomaine/_delete_form.html.twig') }}
+
+    </div>
+{% endblock %}

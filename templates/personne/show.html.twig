@@ -1,0 +1,271 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ personne }}{% endblock %}
+
+{% block body %}
+
+    <h1>
+        <picto class="personne-picto"></picto>
+        Personne <span>{{ personne }}</span></h1>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-personne-tab" data-bs-toggle="tab" data-bs-target="#nav-personne" type="button" role="tab" aria-controls="nav-personne" aria-selected="true">
+                Personne
+            </button>
+            <button class="nav-link" id="nav-structures-tab" data-bs-toggle="tab" data-bs-target="#nav-structures" type="button" role="tab" aria-controls="nav-structures" aria-selected="false">
+                Structures
+            </button>
+            <button class="nav-link" id="nav-contacts-tab" data-bs-toggle="tab" data-bs-target="#nav-contacts" type="button" role="tab" aria-controls="nav-contacts" aria-selected="false">
+                Contacts
+            </button>
+                <button class="nav-link" id="nav-referents-tab" data-bs-toggle="tab" data-bs-target="#nav-referents" type="button" role="tab" aria-controls="nav-referents" aria-selected="false">
+                    Référent de
+                </button>
+        </div>
+    </nav>
+    <div class="tab-content mt-3" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-personne" role="tabpanel" aria-labelledby="nav-personne-tab" tabindex="0">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ personne.prenom }} {{ personne.nom }}</td>
+                </tr>
+                <tr>
+                    <th>Civilité</th>
+                    <td>{{ personne.civilite }}</td>
+                </tr>
+                {% if personne.vip %}
+                    <tr>
+                        <th>VIP</th>
+                        <td>Oui</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th>Adresse</th>
+                    <td>
+                        {{ personne.adresse | nl2br }}<br>
+                        {% if personne.complementAdresse %}
+                            {{ personne.complementAdresse | nl2br }}<br>
+                        {% endif %}
+                        {{ personne.codePostal }} {{ personne.commune }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Téléphone Mobile</th>
+                    <td>{{ personne.telephoneMobile }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone Fixe</th>
+                    <td>{{ personne.telephoneFixe }}</td>
+                </tr>
+                <tr>
+                    <th>Fonction</th>
+                    <td>{{ personne.fonction }}</td>
+                </tr>
+                <tr>
+                    <th>Département/Domaine</th>
+                    <td>{{ personne.departementDomaine }}</td>
+                </tr>
+                <tr>
+                    <th>Structure</th>
+                    <td>
+                        <ul class="list-unstyled">
+                            {% for structure in personne.structures %}
+                                <li>
+                                    {% if is_granted("VIEW", structure) %}
+                                        <a href="{{ path('app_structure_show', {id: structure.id}) }}">{{ structure }}</a>
+                                    {% else %}
+                                        {{ structure }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Création</th>
+                    <td>{{ personne.createdByAt }}</td>
+                </tr>
+                <tr>
+                    <th>Dernière modification</th>
+                    <td>{{ personne.updatedByAt }}</td>
+                </tr>
+                <tr>
+                    <th>Activé</th>
+                    <td>{{ personne.enabled ? "Oui" :"Non" }}</td>
+                </tr>
+                {% if is_granted('ROLE_USER_EDIT') and personne.username %}
+                    <tr class="admin">
+                        <th>Identifiant</th>
+                        <td>{{ personne.username }}</td>
+                    </tr>
+                    <tr class="admin">
+                        <th>Profil</th>
+                        <td>
+                            {{ personne.profil }}
+                            {% if is_granted('ROLE_SUPER_ADMIN') and personne.profil %}
+                                <a href="{{ impersonation_path(personne.username) }}" title="impersonate" class="btn btn-danger btn-sm btn-impersonate float-end"> imp.</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+
+                <tr>
+                    <th>Id</th>
+                    <td>{{ personne.id }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            {% if is_granted('EDIT', personne) %}
+                <a href="{{ path('app_personne_edit', {'id': personne.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
+            {% endif %}
+            {{ include('personne/_delete_form.html.twig') }}
+        </div>
+
+        <div class="tab-pane fade" id="nav-structures" role="tabpanel" aria-labelledby="nav-structures-tab" tabindex="0">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Raison sociale</th>
+                    <th>Commune</th>
+                    <th>action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for structure in personne.structures %}
+                    <tr>
+                        <td>
+                            {% if is_granted('VIEW', structure) %}
+                                <a href="{{ path('app_structure_show', {id: structure.id}) }}">{{ structure }}</a>
+                            {% else %}
+                                {{ structure }}
+                            {% endif %}
+                        </td>
+                        <td>{{ structure.commune }}</td>
+                        <td>
+                            {% if is_granted('EDIT',personne) %}
+                                <a href="{{ path('app_personne_remove_structure', {structure:structure.id, personne: personne.id}) }}"
+                                   class="btn btn-sm btn-danger btn-delete"
+                                   onClick="return(confirm('Supprimer le lien entre la personne et la structure ?'))"
+                                >suppr. lien</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if is_granted('EDIT', personne) %}
+                <div class="mt-5">
+                    <div class="autocomplete">
+                        <label for="structure-autocomplete">Ajouter une structure : </label>
+                        <input type="text" class="form-control" placeholder="saisissez un nom" id="structure-autocomplete" data-value=""
+                               data-url="{{ path('app_personne_structure_autocomplete') }}"/>
+                        <form action="{{ path('app_personne_add_structure') }}" method="post" id="formAddStructure">
+                            <input type="hidden" name="personne" value="{{ personne.id }}">
+                            <input type="hidden" id='inputAddStructure' name="structure" value="">
+                        </form>
+                    </div>
+                    <br/><small class="info">La structure doit préalablement avoir été créée <br/> dans l'onglet "Structure" </small>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane fade" id="nav-referents" role="tabpanel" aria-labelledby="nav-referents-tab" tabindex="0">
+            Structures supervisées par {{ personne }}
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Raison sociale</th>
+                    <th>Commune</th>
+                    <th>action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for structure in personne.referentStructures %}
+                    <tr>
+                        <td>
+                            {% if is_granted('VIEW', structure) %}
+                                <a href="{{ path('app_structure_show', {id: structure.id}) }}">{{ structure }}</a>
+                            {% else %}
+                                {{ structure }}
+                            {% endif %}
+                        </td>
+                        <td>{{ structure.commune }}</td>
+                        <td>
+                            {% if is_granted('EDIT',personne) %}
+                                <a href="{{ path('app_personne_remove_referent', {structure:structure.id, referent: personne.id}) }}"
+                                   class="btn btn-sm btn-danger btn-delete"
+                                   onClick="return(confirm('Supprimer le lien entre le référent et la structure ?'))"
+                                >suppr. lien</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if is_granted('EDIT', personne) %}
+                <div class="mt-5">
+                    <div class="autocomplete">
+                        <label for="referent-autocomplete">Ajouter une structure supervisée : </label>
+                        <input type="text" class="form-control" placeholder="saisissez un nom" id="referent-autocomplete" data-value=""
+                               data-url="{{ path('app_personne_structure_autocomplete') }}"/>
+                        <form action="{{ path('app_personne_add_referent') }}" method="post" id="formAddReferent">
+                            <input type="hidden" name="personne" value="{{ personne.id }}">
+                            <input type="hidden" id='inputAddReferent' name="structure" value="">
+                        </form>
+                    </div>
+                    <br/><small class="info">La structure doit préalablement avoir été créée <br/> dans l'onglet "Structure" </small>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane fade" id="nav-contacts" role="tabpanel" aria-labelledby="nav-contacts-tab" tabindex="0">
+
+            {% if is_granted('ROLE_CONTACT_CREATE') %}
+                <a href="{{ path('app_contact_personne_new', {personne: personne.id}) }}" class="btn btn-primary btn-add btn-sm">ajouter</a>
+            {% endif %}
+            <div class="row mt-2">
+                {% for contact in contacts %}
+                    {{ include('contact/_contact.html.twig') }}
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mt-5">
+        {% if is_granted('ROLE_PERSONNE_VIEW') %}
+            <a href="{{ path('app_personne_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        import {FrontAutoComplete} from 'frontTools';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const a = new FrontAutoComplete('structure-autocomplete', function (id) {
+                document.getElementById('inputAddStructure').value = id;
+                document.getElementById('formAddStructure').submit();
+            }, 2, 500);
+
+            const b = new FrontAutoComplete('referent-autocomplete', function (id) {
+                document.getElementById('inputAddReferent').value = id;
+                document.getElementById('formAddReferent').submit();
+            }, 2, 500);
+
+
+            {% if app.request.query.get('tab') is not null %}
+            let tab = document.getElementById("nav-{{ app.request.query.get('tab') }}-tab");
+            if (tab) {
+                tab.click()
+            }
+            {% endif %}
+        });
+    </script>
+{% endblock %}

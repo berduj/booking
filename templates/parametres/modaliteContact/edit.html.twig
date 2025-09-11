@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier modalité de contact{% endblock %}
+
+{% block body %}
+    <h1>Modifier modalité de contact <span>{{ modaliteContact }}</span></h1>
+
+    {{ include('parametres/modaliteContact/_form.html.twig') }}
+    {{ include('parametres/modaliteContact/_delete_form.html.twig') }}
+{% endblock %}

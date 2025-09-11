@@ -1,0 +1,65 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\EventListener;
+
+use App\Entity\Contact;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
+use Doctrine\Common\EventArgs;
+use Doctrine\ORM\Events;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
+#[AsEntityListener(event: Events::preFlush, method: 'onPreFlush', entity: Contact::class)]
+#[AsEntityListener(event: Events::preRemove, method: 'onPreRemove', entity: Contact::class)]
+final class ContactUploadEventListener
+{
+    private string $uploadDir;
+
+    public function __construct(private readonly Filesystem $fs, private readonly SluggerInterface $slugger, string $uploadDir)
+    {
+        $this->uploadDir = $uploadDir;
+    }
+
+    public function onPreFlush(Contact $object, EventArgs $args): void
+    {
+        $destinationDir = $this->getDestinationDir($object, true);
+
+        if ($object->removeFile) {
+            if ($object->getFilename() !== '') {
+                $this->fs->remove($destinationDir.$object->getFilename());
+                $object->setFilename(null);
+            }
+        }
+
+        $file = $object->file;
+        if ($file instanceof UploadedFile) {
+            $fileName = (string) $this->slugger->slug(str_replace($file->getClientOriginalExtension(), uniqid(), $file->getClientOriginalName())).'.'.$file->getClientOriginalExtension();
+            $this->fs->remove($destinationDir.'/'.$object->getFilepath());
+
+            $file->move($destinationDir, $fileName);
+            $object->setFilename($fileName);
+            $object->setTitre($file->getClientOriginalName());
+        }
+    }
+
+    private function getDestinationDir(Contact $object, bool $forceCreation): string
+    {
+        $destinationDir = $this->uploadDir.$object->getDir().'/';
+        if (!is_dir($destinationDir) && $forceCreation) {
+            $this->fs->mkdir($destinationDir, 0777);
+        }
+
+        return $destinationDir;
+    }
+
+    public function onPreRemove(Contact $object, EventArgs $args): void
+    {
+        if ($object->getFilename() !== '') {
+            $destinationDir = $this->getDestinationDir($object, false);
+            $this->fs->remove($destinationDir.$object->getFilename());
+        }
+    }
+}

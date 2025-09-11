@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a class="float-end" href="{{ path('app_mes_widgets') }}">Choisir mes widgets</a><br/>
+    <a class="float-end" href="{{ path('app_alerte_index') }}">Gérer mes alertes</a><br/>
+
+    <h1>Tableau de bord <span>{{ app.user }}</span></h1>
+    <hr class="mb-4">
+
+    {% if alertes|length >0 %}
+        <div class="row">
+            {% for alerte in alertes %}
+                {% include 'dashboard/_alerte.html.twig' with {'alerte' : alerte } %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="row">
+        {% for widget in widgets %}
+            {% include  widget.template with {'widget': widget } %}
+        {% endfor %}
+    </div>
+{% endblock %}

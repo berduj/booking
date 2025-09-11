@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Départements/Domaines{% endblock %}
+
+{% block body %}
+    <h1>Départements/Domaines</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Libellé</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody class="sortable-entity" data-url="{{ path('sortable_entity') }}" data-entity="App\Entity\DepartementDomaine">
+        {% for departementDomaine in departementDomaines %}
+            <tr data-id="{{ departementDomaine.id }}">
+                <td class="handle"></td>
+                <td class="{{ departementDomaine.enabled?"on":"off" }}"></td>
+                <td>{{ departementDomaine.libelle }}</td>
+                <td>
+                    <a href="{{ path('app_departementDomaine_show', {'id': departementDomaine.id}) }}" class="btn btn-primary btn-sm btn-show">voir</a>
+                    <a href="{{ path('app_departementDomaine_edit', {'id': departementDomaine.id}) }}" class="btn btn-primary btn-sm btn-edit">modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_departementDomaine_new') }}" class="btn btn-primary btn-sm btn-add">ajouter</a>
+{% endblock %}

@@ -1,0 +1,15 @@
+# Documentation on how to configure the bundle can be found at: https://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html
+liip_imagine:
+    driver: "gd"
+    twig:
+        mode: lazy
+
+    webp:
+        generate: true
+
+    # example filter
+    filter_sets:
+        photo_action:
+            filters:
+                thumbnail: { size: [400, 400], mode: thumbnail }
+                auto_rotate: ~

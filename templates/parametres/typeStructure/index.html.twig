@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Types de structures{% endblock %}
+
+{% block body %}
+    <h1>Types de structures</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Libellé</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody class="sortable-entity" data-url="{{ path('sortable_entity') }}" data-entity="App\Entity\TypeStructure">
+        {% for typeStructure in typeStructures %}
+            <tr data-id="{{ typeStructure.id }}">
+                <td class="handle"></td>
+                <td class="{{ typeStructure.enabled?"on":"off" }}"></td>
+                <td>{{ typeStructure.libelle }}</td>
+                <td>
+                    <a href="{{ path('app_typeStructure_show', {'id': typeStructure.id}) }}" class="btn btn-primary btn-sm btn-show">voir</a>
+                    <a href="{{ path('app_typeStructure_edit', {'id': typeStructure.id}) }}" class="btn btn-primary btn-sm btn-edit">modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_typeStructure_new') }}" class="btn btn-primary btn-sm btn-add">ajouter</a>
+{% endblock %}

@@ -1,0 +1,26 @@
+
+<table class="table">
+    {% for indicateur in action.typeAction.indicateurs %}
+        {% set valeur = action.indicateurValue(indicateur) %}
+
+        <tr>
+            <th>
+                {{ indicateur.libelle }}
+            </th>
+            <td>{{ indicateur.typeIndicateur }}</td>
+            <td>
+                {% if indicateur.format == constant('App\\Entity\\Indicateur::FORMAT_CHOICE') %}
+                    <select class="form-select selectUpdatable" data-id="{{ action.id }}-{{ indicateur.id }}" data-url="{{ path('app_action_edit_indicateur') }}">
+                        <option value=""></option>
+                        {% for value in indicateur.valeursProposeesAsArray %}
+                            <option value="{{ value }}" {{ value == valeur ? "SELECTED" : "" }}>{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <input type="text" class="form-control updatable" value="{{ valeur }}" data-id="{{ action.id }}-{{ indicateur.id }}"
+                           data-url="{{ path('app_action_edit_indicateur') }}">
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

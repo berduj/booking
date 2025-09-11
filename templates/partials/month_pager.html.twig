@@ -1,0 +1,18 @@
+{# parametres à passer : route, route_parameters, active_letter #}
+<div class="btn-group mb-3">
+    {% for month in 1..12 %}
+        {% set route_parameters_page= route_parameters|merge({'month': month, 'year': yearMonth.year}) %}
+        <a href="{{ path(route, route_parameters_page) }}" class="btn btn-outline-primary {{ month == yearMonth.month ?'active' }}" aria-current="page">{{ month }}</a>
+    {% endfor %}
+    {% set route_parameters_page= route_parameters|merge({'month': -1, 'year': yearMonth.year}) %}
+    <a href="{{ path(route, route_parameters_page) }}" class="btn btn-outline-primary ms-2 {{ -1 == yearMonth.month ?'active' }}" aria-current="page" title="tous les mois de l'année">%</a>
+
+    {% set route_parameters_page= route_parameters|merge({'month': 0, 'year': 0 }) %}
+
+    <a href="{{ path(route, route_parameters_page) }}" class="btn btn-outline-primary ms-2 me-2 {{ -1 == yearMonth.month ?'active' }}" aria-current="page">Aujourd'hui</a>
+
+    {% for i in -1..1 %}
+        {% set route_parameters_page= route_parameters|merge({'month': yearMonth.month, 'year': yearMonth.year+i}) %}
+        <a href="{{ path(route, route_parameters_page) }}" class="btn btn-outline-primary {{ i == 0 ?'active' }}" aria-current="page">{{ yearMonth.year+i }}</a>
+    {% endfor %}
+</div>

@@ -1,0 +1,40 @@
+<div class="row">
+    {% for photo in photos %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+
+            <div class="card">
+                <a href="{{ photo.url }}" target="_blank">
+                    <img src="{{ photo.url | imagine_filter('photo_action') }}" class="card-img-top"/>
+                </a>
+            </div>
+            {% if is_granted('EDIT', action) %}
+            <a href="{{ path('app_action_delete_photo', {action: action.id, photo: photo.id}) }}" onclick="return(confirm('Supprimer cette photo ?'))" class="btn btn-delete btn-sm"></a>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+{% if is_granted('EDIT', action) %}
+<div class="row">
+    <div class="col-6"></div>
+    <div class="col-6 mt-5">
+
+        <div class="card">
+            <div class="card-header"> Ajouter une photo</div>
+            <div class="card-body">
+                {{ form_start(formPhoto) }}
+                {{ form_widget(formPhoto) }}
+                <button class="btn btn-primary btn-sm btn-add">ajouter</button>
+                {{ form_end(formPhoto) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<style>
+    .card-img-top {
+        width: 100%;
+        height: auto;
+    }
+</style>

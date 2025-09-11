@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle personne{% endblock %}
+
+{% block body %}
+    <h1><picto class="personne-picto"></picto>Nouvelle personne</h1>
+
+    {{ include('personne/_form.html.twig') }}
+
+{% endblock %}

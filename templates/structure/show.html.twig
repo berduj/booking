@@ -1,0 +1,260 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ structure }}{% endblock %}
+
+{% block body %}
+
+    <h1>
+        <picto class="structure-picto"></picto>
+        Structure <span>{{ structure }}</span></h1>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-structure-tab" data-bs-toggle="tab" data-bs-target="#nav-structure" type="button" role="tab" aria-controls="nav-structure" aria-selected="true">
+                Structure
+            </button>
+            {% if structure.longitude or structure.latitude %}
+                <button class="nav-link" id="nav-map-tab" data-bs-toggle="tab" data-bs-target="#nav-map" type="button" role="tab" aria-controls="nav-map" aria-selected="false">
+                    Carte
+                </button>
+            {% endif %}
+
+            <button class="nav-link" id="nav-personnes-tab" data-bs-toggle="tab" data-bs-target="#nav-personnes" type="button" role="tab" aria-controls="nav-personnes" aria-selected="false">
+                Personnes de la structure
+            </button>
+
+            <button class="nav-link" id="nav-referents-tab" data-bs-toggle="tab" data-bs-target="#nav-referents" type="button" role="tab" aria-controls="nav-referents" aria-selected="false">
+                Référents Batard
+            </button>
+            <button class="nav-link" id="nav-contacts-tab" data-bs-toggle="tab" data-bs-target="#nav-contacts" type="button" role="tab" aria-controls="nav-contacts" aria-selected="false">
+                Contacts
+            </button>
+        </div>
+    </nav>
+
+    <div class="tab-content mt-3" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-structure" role="tabpanel" aria-labelledby="nav-structure-tab" tabindex="0">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Nom usuel</th>
+                    <td>{{ structure.nom }}</td>
+                </tr>
+                <tr>
+                    <th>Raison Sociale</th>
+                    <td>{{ structure.raisonSociale }}</td>
+                </tr>
+                <tr>
+                    <th>Type de structure</th>
+                    <td>
+                        <ul class="list-unstyled">
+                            {% for typeStructure in structure.typeStructures %}
+                                <li>{{ typeStructure }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Tags</th>
+                    <td>{{ structure.tags | join(', ') }}</td>
+                </tr>
+                <tr>
+                    <th>Adresse</th>
+                    <td>
+                        {{ structure.adresse | nl2br }}<br>
+                        {% if structure.complementAdresse %}
+                            {{ structure.complementAdresse | nl2br }}<br>
+                        {% endif %}
+                        {{ structure.codePostal }} {{ structure.commune }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone</th>
+                    <td>{{ structure.telephone }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ structure.email }}</td>
+                </tr>
+                <tr>
+                    <th>Siret</th>
+                    <td>{{ structure.siret }}</td>
+                </tr>
+                <tr>
+                    <th>Date premier contact</th>
+                    <td>
+                        {{ structure.datePremierContact? structure.datePremierContact.format('d/m/Y') }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Informations diverses</th>
+                    <td>{{ structure.infosDiverses |nl2br }}</td>
+                </tr>
+                <tr>
+                    <th>Activé</th>
+                    <td>{{ structure.enabled ? "Oui" :"Non" }}</td>
+                </tr>
+                {% if structure.adminOnly %}
+                    <tr>
+                        <th>Admin</th>
+                        <td>Seuls les administrateurs peuvent modifier cette structure</td>
+                    </tr>
+                {% endif %}
+
+                <tr>
+                    <th>Création (fiche structure)</th>
+                    <td>{{ structure.createdByAt }}</td>
+                </tr>
+                <tr>
+                    <th>Dernière modification</th>
+                    <td>{{ structure.updatedByAt }}</td>
+                </tr>
+                <tr>
+                    <th>Coordonnées GPS</th>
+                    <td>{{ structure.latitude }} ; {{ structure.longitude }}</td>
+                </tr>
+                <tr>
+                    <th>Score géocodage</th>
+                    <td>{{ structure.scoreGeocode }}</td>
+                </tr>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ structure.id }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            {% if is_granted('EDIT', structure) %}
+                <a href="{{ path('app_structure_edit', {'id': structure.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
+                <a href="{{ path('app_structure_geocode', {'id': structure.id}) }}" class="btn btn-sm btn-primary btn-geo">géocoder</a>
+                {% if structure.siret %}
+                    <a href="{{ path('app_structure_update_from_siret', {'id': structure.id}) }}" class="btn btn-sm btn-primary btn-edit">MAJ depuis SIRET</a>
+                {% endif %}
+            {% endif %}
+            {{ include('structure/_delete_form.html.twig') }}
+        </div>
+
+        <div class="tab-pane fade" id="nav-personnes" role="tabpanel" aria-labelledby="nav-personnes-tab" tabindex="0">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Fonction</th>
+                    <th>Email</th>
+                    <th>Tél. mob</th>
+                    <th>Tél. fixe</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for personne in structure.personnes %}
+                    <tr>
+                        <td>
+                            {% if is_granted('VIEW', personne) %}
+                                <a href="{{ path('app_personne_show', {id: personne.id }) }}">{{ personne.nom }} {{ personne.prenom }}</a>
+                            {% else %}
+                                {{ personne.nom }} {{ personne.prenom }}
+                            {% endif %}
+                        </td>
+                        <td>{{ personne.fonction }}</td>
+                        <td>{{ personne.email }}</td>
+                        <td>{{ personne.telephoneMobile }}</td>
+                        <td>{{ personne.telephoneFixe }}</td>
+                        <td>
+                            {% if is_granted('EDIT', structure) %}
+                                <a href="{{ path('app_structure_remove_personne', {structure: structure.id, personne: personne.id}) }}"
+                                   class="btn btn-sm btn-delete btn-danger"
+                                   onClick="return(confirm('Supprimer le lien entre la personne et la structure ?'))"
+                                >suppr. lien</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if is_granted('EDIT', structure) %}
+                <div class="mt-5">
+                    <div class="autocomplete">
+                        <label for="personne-autocomplete">Ajouter une personne : </label>
+                        <input type="text" class="form-control" placeholder="saisissez un nom" id="personne-autocomplete" data-value="" data-url="{{ path('app_structure_personne_autocomplete') }}"/>
+                        <form action="{{ path('app_structure_add_personne') }}" method="post" id="formAddPersonne">
+                            <input type="hidden" name="structure" value="{{ structure.id }}">
+                            <input type="hidden" id='inputAddPersonne' name="personne" value="">
+                        </form>
+                    </div>
+                </div>
+                <small class="info">La personne doit préalablement avoir été créée <br/> dans l'onglet "Personne" </small>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane fade" id="nav-referents" role="tabpanel" aria-labelledby="nav-referents-tab" tabindex="0">
+            {{ include('structure/referents.html.twig') }}
+        </div>
+
+        {% if structure.longitude or structure.latitude %}
+            <div class="tab-pane fade" id="nav-map" role="tabpanel" aria-labelledby="nav-map-tab" tabindex="0">
+                <div id="map"></div>
+            </div>
+        {% endif %}
+
+        <div class="tab-pane fade" id="nav-contacts" role="tabpanel" aria-labelledby="nav-contacts-tab" tabindex="0">
+            {% if is_granted('ROLE_CONTACT_CREATE') %}
+                <a href="{{ path('app_contact_structure_new', {structure: structure.id}) }}" class="btn btn-primary btn-add btn-sm">ajouter</a>
+            {% endif %}
+            <div class="row mt-2">
+                {% for contact in contacts %}
+                    {{ include('contact/_contact.html.twig') }}
+                {% endfor %}
+            </div>
+        </div>
+
+
+    </div>
+    <div class="mt-5">
+        <a href="{{ path('app_structure_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        import {FrontAutoComplete} from 'frontTools';
+
+        document.addEventListener("DOMContentLoaded", function (event) {
+            const a = new FrontAutoComplete('personne-autocomplete', function (id) {
+                document.getElementById('inputAddPersonne').value = id;
+                document.getElementById('formAddPersonne').submit();
+            }, 2, 500);
+
+            const b = new FrontAutoComplete('referent-autocomplete', function (id) {
+                document.getElementById('inputAddReferent').value = id;
+                document.getElementById('formAddReferent').submit();
+            }, 2, 500);
+
+
+            {% if app.request.query.get('tab') is not null %}
+            let tab = document.getElementById("nav-{{ app.request.query.get('tab') }}-tab");
+            if (tab) {
+                tab.click()
+            }
+            {% endif %}
+        });
+        {% if structure.longitude or structure.latitude %}
+        var icon = L.icon({iconUrl: '/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41]});
+        var map = L.map('map').setView([{{ structure.longitude }}, {{ structure.latitude }} ], 13);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([{{ structure.longitude }}, {{ structure.latitude }}], {icon: icon}).addTo(map).bindPopup('{{ structure }}')
+        document.getElementById('nav-map-tab').addEventListener('click', function () {
+            setTimeout(function () {
+                map.invalidateSize();
+            }, 500);
+        })
+
+        setTimeout(function () {
+            map.invalidateSize();
+        }, 500);
+        {% endif %}
+    </script>
+{% endblock %}

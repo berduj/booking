@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier structure{% endblock %}
+
+{% block body %}
+    <h1><picto class="structure-picto"></picto>Modifier structure</h1>
+
+    {{ include('structure/_form.html.twig') }}
+    {{ include('structure/_delete_form.html.twig') }}
+{% endblock %}

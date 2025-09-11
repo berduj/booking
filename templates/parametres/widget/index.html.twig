@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Widgets{% endblock %}
+
+{% block body %}
+    <h1>Permissions d'accès aux widgets</h1>
+
+    <style>
+        .vertical-text {
+            transform: rotate(-70deg);
+            white-space: nowrap;
+            width: 20px;
+        }
+
+        table.table-vertical {
+            margin-top : 15em;
+        }
+        th {
+            padding: 0;
+        }
+
+        th div {
+            margin-right: 20px;
+        }
+    </style>
+
+    <table class="table table-vertical">
+        <thead>
+        <th></th>
+
+        {% for profil in profils %}
+            <th>
+                <div class="vertical-text">{{ profil }}</div>
+            </th>
+        {% endfor %}
+        </thead>
+
+        <tbody>
+        {% for widget in widgets %}
+            <tr>
+                <td title="{{ widget.class }}">{{ widget.libelle }}</td>
+                {% for profil in profils %}
+                    <td class="clickable {{ profil in widget.profils  ? "on":"off" }}" data-url="{{ path('app_widget_toggle') }}" data-id="{{ profil.id }}-{{ widget.id }}"></td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+
+        import {FrontToggle} from 'frontTools';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('td.clickable').forEach(function (element) {
+                element.addEventListener('click', function () {
+                    new FrontToggle(element)
+                })
+            })
+        });
+    </script>
+{% endblock %}

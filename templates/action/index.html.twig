@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Actions{% endblock %}
+
+{% block body %}
+    <h1>
+        <picto class="action-picto"></picto>
+        Actions
+    </h1>
+
+    {% include 'partials/month_pager.html.twig' with {route: 'app_action_index_date', route_parameters: {}} %}
+
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-3">{{ form_row(form.statutAction) }}</div>
+        <div class="col-3">{{ form_row(form.typeAction) }}</div>
+        <div class="col-3">{{ form_row(form.personnel) }}</div>
+        <div class="col-3">{{ form_row(form.libelle) }}</div>
+    </div>
+    {{ form_end(form) }}
+
+    <div>
+        {% if is_granted('ROLE_ACTION_CREATE') %}
+            <a href="{{ path('app_action_new') }}" class="btn btn-primary btn-sm btn-add">ajouter</a>
+        {% endif %}
+
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Date</th>
+
+            <th style="width: 30%">Libellé</th>
+            <th>Statut</th>
+            <th>Type</th>
+
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for action in actions %}
+            <tr>
+                <td class="{{ action.statutAction.afficherDansRecherche ? "on":"off" }}"></td>
+                <td>{{ action.dateDebut.format('d/m/Y') }}  {{ action.dateFin ? " - " ~ action.dateFin.format('d/m/Y') :"" }}  </td>
+                <td>{{ action.libelle }}</td>
+                <td>{{ action.statutAction }}</td>
+                <td>{{ action.typeAction }}</td>
+
+                <td>
+                    {% if is_granted('VIEW', action) %}
+                        <a href="{{ path('app_action_show', {'id': action.id}) }}" class="btn btn-primary btn-sm btn-show">voir</a>
+                    {% endif %}
+                    {% if is_granted('EDIT', action) %}
+                        <a href="{{ path('app_action_edit', {'id': action.id}) }}" class="btn btn-primary btn-sm btn-edit">modifier</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if is_granted('ROLE_ACTION_CREATE') %}
+        <a href="{{ path('app_action_new') }}" class="btn btn-primary btn-sm btn-add">ajouter</a>
+    {% endif %}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        function debounce(func, wait) {
+            var timeout;
+
+            return function() {
+                var context = this, args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    func.apply(context, args);
+                }, wait);
+            };
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.querySelector('form[name="filtre_action"]');
+            var selects = form.querySelectorAll('select');
+            selects.forEach(function (select) {
+                select.addEventListener('change', function () {
+                    form.submit();
+                });
+            });
+
+            var inputLibelle = form.querySelector('#filtre_action_libelle')
+            inputLibelle.addEventListener('keyup', debounce(function() {
+                form.submit();
+            }, 1000));
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <h1>Importer des structure depuis un fichier <span>Excel</span></h1>
+    <p>Vous pouvez charger ci dessous un fichier excel. Le fichier excel doit être composé de 2 colonnes :</p>
+    <ul>
+        <li>La première contient les numéros de SIRET à importer</li>
+        <li>La deuxième (qui est facultative) contient la date de premier contact de la structure</li>
+    </ul>
+    <p>Les structures seront ensuite créées (si le SIRET est valide). Le nombre max de structures créées est de {{ max }}, vous pouvez passer plusieurs foi sle même fichier, les structure ne seront
+        pas doublonnées.</p>
+    <div class="form">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary btn-sm">importer</button>
+        {{ form_end(form) }}
+    </div>
+    <br/>
+    {% if siretImporter.created|length %}
+        <h3>Création :</h3>
+
+        {% if siretImporter.created|length >1 %}
+            <p>{{ siretImporter.created |length }} structures ont été créées.</p>
+        {% else %}
+            <p>1 structure a été créée.</p>
+        {% endif %}
+        <p>{{ siretImporter.created | join(' , ') }}</p>
+    {% endif %}
+
+    {% if siretImporter.invalid|length %}
+        <h4>SIRET invalides :</h4>
+        <p>Certains numéros de SIRET sont invalides :</p>
+        <p>{{ siretImporter.invalid |join(' -- ') }}</p>
+    {% endif %}
+
+    {% if siretImporter.exists|length %}
+        <h4>Structures Existantes</h4>
+        <p>Certaines structures étaient déjà existantes :</p>
+        <p>{{ siretImporter.exists |join(' -- ') }}</p>
+    {% endif %}
+{% endblock %}
+

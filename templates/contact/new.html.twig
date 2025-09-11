@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau contact{% endblock %}
+
+{% block body %}
+    <h1><picto class="contact-picto"></picto>Nouveau contact
+        <span>{{ personne }} {{ structure }}</span>
+    </h1>
+    {% if personne %}
+        <h3>Personne : <span>{{ personne }}</span></h3>
+    {% endif %}
+    {% if structure %}
+        <h3>Structure : <span>{{ structure }}</span></h3>
+    {% endif %}
+    {{ include('contact/_form.html.twig') }}
+
+{% endblock %}

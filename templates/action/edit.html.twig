@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier action{% endblock %}
+
+{% block body %}
+    <h1><picto class="action-picto"></picto>Modifier action <span>{{ action }}</span></h1>
+
+    {{ include('action/_form.html.twig') }}
+    {{ include('action/_delete_form.html.twig') }}
+{% endblock %}

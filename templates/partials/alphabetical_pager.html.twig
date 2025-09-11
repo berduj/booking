@@ -1,0 +1,9 @@
+{# parametres à passer : route, route_parameters, active_letter #}
+<div class="btn-group mb-3">
+    {% for letter in 'A'..'Z' %}
+        {% set route_parameters_page= route_parameters|merge({'page': letter}) %}
+        <a href="{{ path(route, route_parameters_page) }}" class="btn btn-outline-primary {{ letter == active_letter ?'active' }}" aria-current="page">{{ letter }}</a>
+    {% endfor %}
+    {% set route_parameters_page= route_parameters|merge({'page': '%'}) %}
+    <a href="{{ path(route, route_parameters_page) }}" class="btn btn-outline-primary {{ '%' == active_letter ?'active' }}" aria-current="page">%</a>
+</div>

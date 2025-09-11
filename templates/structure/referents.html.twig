@@ -1,0 +1,57 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th class="text-center" title="Référent principal" ><i class="fas fa-crown"></i></th>
+        <th>Nom</th>
+        <th>Service</th>
+        <th>Email</th>
+        <th>Téléphone</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for personne in structure.referents %}
+        <tr>
+            <td class="text-center">
+                <a href="{{ path('app_structure_referent_principal', {structure: structure.id, referent: personne.id}) }}"
+                   class="{{ personne == structure.referentPrincipal ? "on":"off" }}"
+                   title="{{ personne == structure.referentPrincipal ? "Référent principal" : "Référent secondaire" }}"
+                   style="text-decoration: none"
+                >&nbsp;</a>
+            </td>
+            <td>
+                {% if is_granted('VIEW', personne) %}
+                    <a href="{{ path('app_personne_show', {id: personne.id }) }}">{{ personne.nom }} {{ personne.prenom }}</a>
+                {% else %}
+                    {{ personne.nom }} {{ personne.prenom }}
+                {% endif %}
+            </td>
+            <td>{{ personne.services |join(',') }}</td>
+            <td>{{ personne.email }}</td>
+            <td>{{ personne.telephoneMobile }}</td>
+            <td>
+                {% if is_granted('EDIT', structure) %}
+                    <a href="{{ path('app_structure_remove_referent', {structure: structure.id, referent: personne.id}) }}"
+                       class="btn btn-sm btn-delete btn-danger"
+                       onClick="return(confirm('Supprimer le lien entre le référent et la structure ?'))"
+                    >suppr. lien référent</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if is_granted('EDIT', structure) %}
+    <div class="mt-5">
+        <div class="autocomplete">
+            <label for="personne-autocomplete">Ajouter un référent : </label>
+            <input type="text" class="form-control" placeholder="saisissez un nom" id="referent-autocomplete" data-value="" data-url="{{ path('app_structure_referent_autocomplete') }}"/>
+            <form action="{{ path('app_structure_add_referent') }}" method="post" id="formAddReferent">
+                <input type="hidden" name="structure" value="{{ structure.id }}">
+                <input type="hidden" id='inputAddReferent' name="referent" value="">
+            </form>
+        </div>
+
+    </div>
+    <small class="info">La personne doit préalablement avoir été créée <br/> dans l'onglet "Personne" </small>
+{% endif %}

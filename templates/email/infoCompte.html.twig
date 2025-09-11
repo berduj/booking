@@ -1,0 +1,15 @@
+<p>Bonjour {{ user }},</p>
+<p>nous avons le plaisir de vous adresser les informations de connexion à <b>{{ software }}</b> :</p>
+<p>Url d'accès: <a href="{{ url }}">{{ url  }}</a></p>
+<p>Votre identifiant de connexion : <b>{{ user.username }}</b></p>
+<p>
+    Si vous avez oublié votre mot de passe, ou si c'est votre première connexion,
+    cliquez sur le bouton "Connexion" puis sur le lien "j'ai oublié mon mot de passe",
+    puis saisissez votre email : {{ user.email }}
+</p>
+<p>
+    Vous recevrez ensuite un email contenant les instructions pour créer ou renouveler votre mot de passe.
+</p>
+<p> A bientôt !</p>
+<p style="margin-top: 2em;padding-top: 1em; border-top: 1px solid #999999">cet email vous est envoyé par un robot, il est inutile d'y répondre car la réponse ne sera pas lue.</p>
+

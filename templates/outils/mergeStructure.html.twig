@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fusion de structures{% endblock %}
+
+{% block body %}
+    <h1><picto class="structure-picto"></picto>Fusionner des structures</h1>
+    <p>Pouvoir pouvoir fusionner 2 fiches structures :</p>
+    <ul>
+        <li>les 2 structures doivent avoir la même raison sociale</li>
+        <li>les 2 structures doivent avoir le même code postal</li>
+        <li>la structure à conserver doit être active</li>
+        <li>la structure à supprimer doit être désactivée</li>
+        <li>la structure à supprimer doit avoir "fusionner" dans le Pays</li>
+    </ul>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Structure à supprimer</th>
+            <th>A fusionner dans</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for structureDelete in structures %}
+            {% for structureKeep in finder.findKeepable(structureDelete) %}
+                <tr>
+                    <td>
+                        {{ structureDelete }}<br/>{{ structureDelete.adresse |nl2br }}<br/>
+                        {{ structureDelete.codePostal }} {{ structureDelete.commune }}<br/>
+                        Siret: {{ structureDelete.siret }}
+                    </td>
+                    <td>
+                        {{ structureKeep }}<br/>{{ structureKeep.adresse |nl2br }}<br/>
+                        {{ structureKeep.codePostal }} {{ structureKeep.commune }}<br/>
+                        Siret: {{ structureKeep.siret }}
+                    </td>
+                    <td>
+                        <form method="post">
+                            <input type="hidden" name="keep" value="{{ structureKeep.id }}">
+                            <input type="hidden" name="delete" value="{{ structureDelete.id }}">
+                            <button type="submit" class="btn btn-sm btn-merge btn-primary">fusionner</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

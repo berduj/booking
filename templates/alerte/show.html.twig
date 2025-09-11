@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Alerte : {{ alerte }}{% endblock %}
+
+{% block body %}
+
+    <h1>
+        <picto class="alerte-picto"></picto>
+        Alerte <span>{{ alerte }}</span></h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Utilisateur</th>
+            <td>{{ alerte.personne }}</td>
+        </tr>
+        <tr>
+            <th>Titre</th>
+            <td>{{ alerte.titre }} </td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ alerte.description | nl2br }} </td>
+        </tr>
+        <tr>
+            <th>Alerte sera active à partir du</th>
+            <td>{{ alerte.date.format('d/m/Y') }}</td>
+        </tr>
+
+        <tr>
+            <th>Alerte active</th>
+            <td>
+                <span class="alerte-{{ alerte.enabled?'on':'off' }} me-2"></span>
+                {{ alerte.enabled ? "Oui":"Non" }}
+            </td>
+        </tr>
+        <tr>
+            <th>Création</th>
+            <td>{{ alerte.createdByAt }}</td>
+        </tr>
+        <tr>
+            <th>Modification</th>
+            <td>{{ alerte.updatedByAt }}</td>
+        </tr>
+        <tr>
+            <th>Id</th>
+            <td>{{ alerte.id }}</td>
+        </tr>
+        </tbody>
+    </table>
+    {% if is_granted('EDIT', alerte) %}
+        <a href="{{ path('app_alerte_edit', {'id': alerte.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
+    {% endif %}
+    <a href="{{ path('app_alerte_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+
+    {{ include('alerte/_delete_form.html.twig') }}
+{% endblock %}
+

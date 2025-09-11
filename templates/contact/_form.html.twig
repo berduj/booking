@@ -1,0 +1,17 @@
+{% if not is_granted("ROLE_CONTACT_EDIT") %}
+    <p><b>Auteur :</b> {{ contact.auteur }}</p>
+{% endif %}
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+<button class="btn btn-primary btn-sm">enregistrer</button>
+{% if contact.id %}
+    <a href="{{ path('app_contact_show', {id: contact.id}) }}" class="btn btn-sm btn-primary btn-back">retour</a>
+{% else %}
+    {% if structure %}
+        <a href="{{ path('app_structure_show',{id: structure.id, tab: 'contacts'}) }}" class="btn btn-sm btn-primary btn-back">retour</a>
+    {% else %}
+        <a href="{{ path('app_contact_index',) }}" class="btn btn-sm btn-primary btn-back">retour</a>
+    {% endif %}
+{% endif %}
+{{ form_end(form) }}

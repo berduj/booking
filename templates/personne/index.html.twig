@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Personnes{% endblock %}
+
+{% block body %}
+    <h1>
+        <picto class="personne-picto"></picto>
+        Personnes
+    </h1>
+    {% include 'partials/alphabetical_pager.html.twig' with { route: 'app_personne_index_page', 'active_letter': active_page, route_parameters: {} } %}
+    {% include 'partials/enabled_disabled_all_filter.html.twig' with { route: 'app_personne_index_status', 'status': status, route_parameters: {} } %}
+
+    {% if is_granted('ROLE_PERSONNE_CREATE') %}
+        <div class="row mb-2">
+            <div class="col-6">
+                <a href="{{ path('app_personne_new') }}" class="btn btn-primary btn-sm btn-add">ajouter</a>
+            </div>
+        </div>
+    {% endif %}
+
+    <table class="table table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Nom</th>
+            <th>Ville</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for personne in personnes %}
+            <tr>
+                <td class="{{ personne.enabled?"on":"off" }}"></td>
+                <td>{{ personne.nom }} {{ personne.prenom }} </td>
+                <td>{{ personne.commune }}</td>
+                <td>
+                    {% if is_granted('VIEW', personne) %}
+                        <a href="{{ path('app_personne_show', {'id': personne.id}) }}" class="btn btn-primary btn-sm btn-show">voir</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if is_granted('ROLE_PERSONNE_CREATE') %}
+        <a href="{{ path('app_personne_new') }}" class="btn btn-primary btn-sm btn-add">ajouter</a>
+    {% endif %}
+{% endblock %}

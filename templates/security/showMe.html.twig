@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ user }}{% endblock %}
+
+{% block body %}
+    <h1>Mon compte : <span>{{ user }}</span></h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Nom</th>
+            <td>{{ user.nom }}</td>
+        </tr>
+        <tr>
+            <th>Prénom</th>
+            <td>{{ user.prenom }}</td>
+        </tr>
+        <tr>
+            <th>Identifiant</th>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <th>Profil</th>
+            <td>{{ user.profil }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Création</th>
+            <td>{{ user.createdByAt }}</td>
+        </tr>
+        <tr>
+            <th>Dernière modification</th>
+            <td>{{ user.updatedByAt }}</td>
+        </tr>
+        <tr>
+            <th>Dernière connexion</th>
+            <td>{{ user.lastLogin ? user.lastLogin.format('d/m/Y H:i:s') :"-" }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="{{ path('app_change_my_password') }}" class="btn btn-sm btn-danger">Changer mon mot de passe</a>
+{% endblock %}

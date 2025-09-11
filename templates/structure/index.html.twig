@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Structures{% endblock %}
+
+{% block body %}
+    <h1>
+        <picto class="structure-picto"></picto>
+        Structures
+    </h1>
+    {% include 'partials/alphabetical_pager.html.twig' with { route: 'app_structure_index_page', 'active_letter': active_page, route_parameters: {} } %}
+    {% include 'partials/enabled_disabled_all_filter.html.twig' with { route: 'app_structure_index_status', 'status': status, route_parameters: {} } %}
+    <p>{{ structures|length }} structure{{ structures|length >1 ? "s":"" }}</p>
+    {% if is_granted('ROLE_STRUCTURE_CREATE') %}
+        <form action="{{ path('app_structure_add_siret') }}" method="post">
+        <div class="row">
+            <div class="col-6"></div>
+            <div class="col-6 creation-siret">
+                <p>Créer une structure à partir de son SIRET :</p>
+                <div class="row">
+                    <div class="col-10">
+                        <input class="form-control form-control" type="text" name="siret" id="siret" value="" required placeholder="saisissez un siret">
+                    </div>
+                    <div class="col-2"><button class="btn btn-sm btn-primary btn-add" type="submit">créer</button></div>
+                </div>
+                <p class="center">Rechercher sur : <a href="https://pappers.fr" target="_blank">pappers.fr</a>&nbsp;<a href="https://www.societe.com" target="_blank">www.societe.com</a></p>
+            </div>
+        </div>
+        </form>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Nom</th>
+            <th>Ville</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for structure in structures %}
+            <tr>
+                <td class="{{ structure.enabled?"on":"off" }}"></td>
+                <td>
+                    {% if structure.nom %}
+                        {{ structure.raisonSociale }} <span class="text-light">({{ structure.nom }})</span>
+                    {% else %}
+                        {{ structure.raisonSociale }}
+                    {% endif %}
+                </td>
+                <td>{{ structure.commune }}</td>
+                <td>
+                    {% if is_granted('VIEW', structure) %}
+                        <a href="{{ path('app_structure_show', {'id': structure.id}) }}" class="btn btn-primary btn-show btn-sm btn-show">voir</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if structure.latitude %}
+                        <i class="far fa-map" title="Géolocalisée"></i>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if is_granted('ROLE_STRUCTURE_CREATE') %}
+        <div class="row mt-5">
+            <div class="col-6"><a href="{{ path('app_structure_new') }}" class="btn btn-primary btn-add btn-sm btn-add">ajouter</a></div>
+            <div class="col-6 creation-siret">
+                <p>Créer une structure à partir de son SIRET :</p>
+                <div class="row">
+                    <div class="col-10">
+                        <input class="form-control form-control" type="text" name="siret" id="siret" value="" required placeholder="saisissez un siret">
+                    </div>
+                    <div class="col-2"><button class="btn btn-sm btn-primary btn-add" type="submit">créer</button></div>
+                </div>
+                <p class="center">Rechercher sur : <a href="https://pappers.fr" target="_blank">pappers.fr</a>&nbsp;<a href="https://www.societe.com" target="_blank">www.societe.com</a></p>
+            </div>
+
+        </div>
+    {% endif %}
+{% endblock %}

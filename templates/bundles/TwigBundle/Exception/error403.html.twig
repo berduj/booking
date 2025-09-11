@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="card">
+            <h3 class="card-header">
+                {{ status_code }} - Accès non autorisé
+            </h3>
+            <div class="card-body">
+                <p>Vous n'avez pas les droits pour accéder à la page que vous avez demandée .</p>
+                <code>{{ exception.message }}</code>
+            </div>
+            <div class="card-footer">
+                <a href="{{ path('app_homepage') }}" class="btn btn-primary">retour à la page d'accueil</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

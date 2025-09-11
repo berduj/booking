@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+    <h1>Profil <span>{{ profil }}</span></h1>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-profil-tab" data-bs-toggle="tab" data-bs-target="#nav-profil" type="button" role="tab" aria-controls="nav-profil" aria-selected="true">
+                Profil
+            </button>
+            <button class="nav-link" id="nav-utilisateur-tab" data-bs-toggle="tab" data-bs-target="#nav-utilisateur" type="button" role="tab" aria-controls="nav-utilisateur" aria-selected="false">
+                Utilisateurs
+            </button>
+        </div>
+    </nav>
+    <div class="tab-content mt-3" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-profil" role="tabpanel" aria-labelledby="nav-profil-tab" tabindex="0">
+            <table class="table">
+                <tbody>
+
+                <tr>
+                    <th>Libellé</th>
+                    <td>{{ profil.libelle }}</td>
+                </tr>
+                <tr>
+                    <th>Permissions</th>
+                    <td>
+                        <ul class="list-unstyled list-2-col">
+                            {% for role in  profil.rolesText %}
+                                <li>{{ role }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Création</th>
+                    <td>{{ profil.createdByAt }}</td>
+                </tr>
+                <tr>
+                    <th>Dernière modification</th>
+                    <td>{{ profil.updatedByAt }}</td>
+                </tr>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ profil.id }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <a href="{{ path('app_profil_edit', {'id': profil.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
+            <a href="{{ path('app_profil_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+            {{ include('parametres/profil/_delete_form.html.twig') }}
+        </div>
+        <div class="tab-pane fade show " id="nav-utilisateur" role="tabpanel" aria-labelledby="nav-utilisateur-tab" tabindex="0">
+            <p>Liste des utilisateurs ayant le profil "<span class="bold">{{ profil }} :"</span></p>
+            <table class="table table-bordered">
+                <tbody>
+                {% for personne in profil.personnes %}
+                    <tr>
+                        <td><a href="{{ path('app_personne_show', {id: personne.id}) }}">{{ personne }}</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

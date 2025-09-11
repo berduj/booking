@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contacts{% endblock %}
+
+{% block body %}
+    <h1><picto class="contact-picto"></picto>Contacts</h1>
+
+    {% include 'partials/month_pager.html.twig' with {route: 'app_contact_index_date', route_parameters: {}} %}
+    <p class="text-sm-center small">Pour créer un contact, vous devez passer par la fiche "personne", "structure" ou "action" concernée.</p>
+    <table class="table">
+        <thead>
+        <tr>
+
+            <th>Date</th>
+            <th>Auteur</th>
+            <th>Modalité</th>
+            <th>Titre</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contact in contacts %}
+            <tr>
+
+                <td>{{ contact.date.format('d/m/Y') }}   </td>
+                <td>{{ contact.auteur }}</td>
+                <td>{{ contact.modaliteContact }}</td>
+                <td>{{ contact.titre }}</td>
+
+                <td>
+                    {% if is_granted('VIEW', contact) %}
+                        <a href="{{ path('app_contact_show', {'id': contact.id}) }}" class="btn btn-primary btn-sm btn-show">voir</a>
+                    {% endif %}
+                    {% if is_granted('EDIT', contact) %}
+                        <a href="{{ path('app_contact_edit', {'id': contact.id}) }}" class="btn btn-primary btn-sm btn-edit">modifier</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

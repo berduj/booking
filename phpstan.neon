@@ -1,0 +1,23 @@
+#parameters:
+#    checkGenericClassInNonGenericObjectType: false
+#    checkMissingIterableValueType: false
+#	ignoreErrors:
+#		- '#(.*)DateTimeInterface(.*)#'
+#		- '#(.*)EventDispatcherInterface(.*)#'
+#		- '#(.*)UserInterface given#'
+#		- '#(.*)code above always terminates.#'
+#		- '#Call to an undefined method Doctrine(.*)#'
+#		- '#Call to an undefined method (.*)UserInterface::getPermissionActive(.*)#'
+#		- '#Cannot cast (.*)UserInterface\|null to string#'
+#		- '#Call to an undefined method Traversable(.*)::uasort\(\).#'
+#        - '#Call to an undefined method Doctrine[a-zA-Z0-9\\_]+#'
+#	excludePaths:
+
+
+parameters:
+    level: 8
+    paths:
+        - src
+    ignoreErrors:
+        - '#Property .* never assigned .* so it can be removed from the property type\.#'
+        - '#Property .* is never written, only read\.#'

@@ -1,0 +1,115 @@
+$primary: #1773b6;
+
+$background: #fff;
+$primary-light: darken($background, 5%);
+
+@import '../../vendor/twbs/bootstrap/scss/bootstrap';
+@import 'frontTools';
+@import 'widget';
+@import 'alerte';
+
+body {
+  background-color: $background;
+}
+
+label.required {
+  font-weight: bold;
+}
+label.required:after {
+  content: " *";
+}
+
+.btn {
+  margin-top: 2px;
+}
+
+.btn-delete {
+  float: right;
+}
+
+nav.navbar {
+  margin-bottom: 2em;
+}
+
+h1 span, h2 span, h3 span, h4 span, h5 span, h6 span {
+  color: $primary
+}
+
+ul.list-2-col {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  li {
+    flex-basis: 50%;
+  }
+}
+
+ul.list-3-col {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  li {
+    flex-basis: 32%;
+  }
+}
+
+div.select-multiple-2cols div {
+  display: inline-block;
+  width: 50%
+}
+
+div.select-multiple-3cols div {
+  display: inline-block;
+  width: 32%
+}
+
+div.select-multiple-bordered {
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--bs-border-radius);
+}
+
+.bold {
+  font-weight: bold;
+}
+
+textarea.form-control {
+  min-height: 8em;
+}
+
+#map {
+  height: 800px;
+  border: 1px solid #666;
+}
+
+.text-right {
+  text-align: right;
+}
+
+div.card-border-top {
+  border-top: var(--bs-card-border-width) solid var(--bs-card-border-color);
+
+}
+
+.note {
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--bs-border-radius);
+  min-height: 10rem;
+  background-color: $primary-light;
+}
+
+.text-light {
+  color: #999999 !important;
+}
+
+small.info {
+  color: #999;
+  font-style: italic;
+}
+
+.clickable {
+  cursor: pointer;
+}

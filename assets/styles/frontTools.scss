@@ -1,0 +1,261 @@
+
+.autocomplete {
+  position: relative;
+  display: inline-block;
+  width: 20em;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-items div {
+  padding: 5px;
+  cursor: pointer;
+  background-color: rgba(238, 238, 238, 0.92);
+
+  border-bottom: 1px solid #d4d4d4;
+  font-size: 0.9em;
+}
+
+.autocomplete-items div:hover {
+  background-color: #e9e9e9;
+}
+
+.autocomplete-active {
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+
+.handle {
+  cursor: move;
+}
+
+.on, .off {
+  // cursor: pointer;
+}
+
+.handle, .on, .off {
+  width: 1em;
+  font-family: 'Font Awesome\ 5 Free';
+}
+
+.personne-picto, .structure-picto, .action-picto, .contact-picto, .export-picto, .alerte-picto {
+  font-size: .8em;
+  font-family: 'Font Awesome\ 5 Free';
+  margin-right: .4em;
+}
+
+.handle:after {
+  content: "\f0b2";
+  font-weight: 900;
+  color: #AAA;
+}
+
+.personne-picto:after {
+  content: "\f007";
+  font-weight: bold;
+}
+
+.structure-picto:after {
+  content: "\f1ad";
+  font-weight: bold;
+}
+
+.action-picto:after {
+  content: "\f2b5";
+}
+
+.alerte-picto:after {
+  content: "\f0f3";
+}
+
+.contact-picto:after {
+  content: "\f086";
+  font-weight: bold;
+}
+
+.export-picto:after {
+  content: "\f56d";
+  font-weight: bold;
+}
+
+.on:after {
+  content: "\f14a";
+  font-weight: 900;
+  color: #333;
+  font-family: 'Font Awesome\ 5 Free';
+}
+
+.off:after {
+  content: "\f0c8";
+  font-weight: 900;
+  color: #DDD;
+  font-family: 'Font Awesome\ 5 Free';
+}
+
+
+tr.admin td, tr.admin th {
+  background-color: rgba(240, 128, 128, 0.20);
+}
+
+.btn-login::before, .btn-logout::before,
+.btn-add::before, .btn-word::before, .btn-impersonate::before, .btn-delete::before, .btn-edit::before, .btn-geo::before, .btn-export::before, .btn-commentaire::before, .btn-disabled::before, .btn-show::before, .btn-merge::before, .btn-back::before,
+.btn-save::before, .btn-remove::before, .btn-mail::before, .btn-duplicate::before, .btn-preview::before, .btn-file::before,
+.btn-previous::before, .btn-next::before, .btn-lock::before, .btn-unlock::before, .btn-duplicate::before, .zoom-in::before, .zoom-out::before, .btn-on::before, .btn-off::before {
+  font-family: 'Font Awesome\ 5 Free';
+  font-weight: 900;
+  margin-right: 10px;
+}
+
+.btn-add::before {
+  content: "\f067";
+}
+
+.btn-login::before {
+  content: "\f2f6";
+}
+
+.btn-logout::before {
+  content: "\f2f5";
+}
+
+.btn-word::before {
+  content: "\f1c2";
+}
+
+.btn-commentaire::before {
+  content: "\f075";
+}
+
+.btn-remove::before {
+  content: "\f067";
+}
+
+.btn-edit::before {
+  content: "\f303";
+}
+
+.btn-geo::before {
+  content: "\f5a0";
+}
+
+.btn-export::before {
+  content: "\f56d";
+}
+
+.btn-disabled::before {
+  content: "\f05e";
+}
+
+.btn-show::before {
+  content: "\f06e";
+}
+
+.btn-merge::before {
+  content: "\f2f6";
+}
+
+.btn-back::before {
+  content: "\f04a";
+}
+
+.btn-lock::before {
+  content: "\f023";
+}
+
+.btn-unlock::before {
+  content: "\f3c1";
+}
+
+.btn-duplicate::before {
+  content: "\f0c5";
+}
+
+.btn-mail::before {
+  content: "\f0e0";
+}
+
+
+.btn-save::before {
+  content: "\f0c7";
+}
+
+.btn-delete::before {
+  content: "\f1f8";
+}
+
+.btn-preview::before {
+  content: "\f002";
+}
+
+.btn-impersonate::before {
+  content: "\f6fa";
+}
+
+.btn-file::before {
+  content: "\f15b";
+}
+
+.btn-previous::before {
+  content: "\f060";
+  font-weight: 900;
+}
+
+.btn-next::before {
+  content: "\f061";
+  font-weight: 900;
+}
+
+.btn-delete {
+  @extend .btn-danger;
+  float: right;
+}
+
+textarea.small {
+  height: 5em;
+  min-height: 5em !important;
+}
+
+.action-contacts div.card-body {
+  max-height: 15em;
+  overflow: auto;
+}
+
+div.creation-siret {
+  padding: 15px;
+  border: 1px solid $primary;
+  background-color: $primary-light;
+  border-radius: 5px;
+  font-size: 0.9em;
+  margin-bottom: 1em;
+
+  p {
+    margin-bottom: 0;
+    padding-left: 0px;
+  }
+
+  p.center {
+    text-align: center;
+  }
+}
+
+textarea.code, textarea.code:focus {
+  font-family: "Courier New", Courier, monospace;
+  height: 35em;
+}
+
+textarea.code:focus {
+  color: white;
+  background-color: #555555;
+}
+
+nav.top-navbar {
+  border-bottom: 1px solid $primary-light;
+}

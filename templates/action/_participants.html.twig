@@ -1,0 +1,81 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Structure</th>
+        <th>Personne</th>
+        <th>Type participant</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for actionParticipant in action.actionParticipants %}
+        <tr>
+            <td>
+                {% if actionParticipant.structure %}
+                    {{ actionParticipant.structure }}
+                {% elseif is_granted('EDIT', action) and actionParticipant.availableStructures|length > 0 %}
+                    <select class="form-select selectUpdatable" data-id="{{ actionParticipant.id }}" data-url="{{ path('app_action_edit_participant_structure') }}">
+                        <option value=""></option>
+                        {% for structure in actionParticipant.availableStructures %}
+                            <option value="{{ structure.id }}" {{ structure == actionParticipant.structure ? "SELECTED":"" }} >{{ structure }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </td>
+            <td>
+                {% if actionParticipant.personne %}
+                    {% if is_granted('VIEW', actionParticipant.personne) %}
+                        <a href="{{ path('app_personne_show', {id :  actionParticipant.personne.id }) }}">{{ actionParticipant.personne }}</a>
+                    {% else %}
+                        {{ actionParticipant.personne }}
+                    {% endif %}
+                {% elseif is_granted('EDIT', action) and actionParticipant.availablePersonnes|length > 0 %}
+                    <select class="form-select selectUpdatable" data-id="{{ actionParticipant.id }}" data-url="{{ path('app_action_edit_participant_personne') }}">
+                        <option value=""></option>
+                        {% for personne in actionParticipant.availablePersonnes %}
+                            <option value="{{ personne.id }}" {{ personne == actionParticipant.personne ? "SELECTED":"" }} >{{ personne }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </td>
+            <td>
+                {% if is_granted('EDIT', action) %}
+                    <select class="form-select selectUpdatable" data-id="{{ actionParticipant.id }}" data-url="{{ path('app_action_edit_type_participant') }}">
+                        <option value=""></option>
+                        {% for type in typeParticipants %}
+                            <option value="{{ type.id }}" {{ type == actionParticipant.typeParticipant ? "SELECTED":"" }} >{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    {{ actionParticipant.typeParticipant }}
+                {% endif %}
+            </td>
+            <td>
+                {% if is_granted('EDIT',action) %}
+                    <a href="{{ path('app_action_remove_participant', {id: actionParticipant.id, action: action.id}) }}"
+                       onclick="return(confirm('Retirer ce participant ?'))"
+                       class=" btn btn-sm btn-delete">suppr</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if is_granted('EDIT', action) %}
+    <div class="mt-5 mb-4">
+        <div class="autocomplete" style="width: 30em!important;">
+            <label for="participant-autocomplete">Ajouter un participant : </label>
+            <input type="text" class="form-control" placeholder="saisissez un nom de personne ou d'entreprise" id="participant-autocomplete" data-value=""
+                   data-url="{{ path('app_action_participant_autocomplete') }}"/>
+            <form action="{{ path('app_action_add_participant') }}" method="post" id="formAddParticipant">
+                <input type="hidden" name="action" value="{{ action.id }}">
+                <input type="hidden" id='inputAddParticipant' name="participant" value="">
+                <input type="hidden" id='inputAddParticipantType' name="type" value="">
+            </form>
+        </div>
+        <br/>
+        <small class="info">La personne ou l'entreprise doit préalablement avoir été créée <br/> dans l'onglet "Personne" ou "Structure" </small>
+    </div>
+
+
+{% endif %}

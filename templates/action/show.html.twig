@@ -1,0 +1,218 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Action : {{ action }}{% endblock %}
+
+{% block body %}
+
+    <h1>
+        <picto class="action-picto"></picto>
+        Action <span>{{ action }}</span></h1>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-action-tab" data-bs-toggle="tab" data-bs-target="#nav-action" type="button" role="tab" aria-controls="nav-action" aria-selected="true">
+                Action
+            </button>
+
+            <button class="nav-link" id="nav-pilotage-tab" data-bs-toggle="tab" data-bs-target="#nav-pilotage" type="button" role="tab" aria-controls="nav-pilotage" aria-selected="false">
+                Pilotage
+            </button>
+            <button class="nav-link" id="nav-participants-tab" data-bs-toggle="tab" data-bs-target="#nav-participants" type="button" role="tab" aria-controls="nav-participants"
+                    aria-selected="false">
+                Participants
+            </button>
+            <button class="nav-link" id="nav-indicateurs-tab" data-bs-toggle="tab" data-bs-target="#nav-indicateurs" type="button" role="tab" aria-controls="nav-indicateurs" aria-selected="false">
+                Indicateurs
+            </button>
+            <button class="nav-link" id="nav-contacts-tab" data-bs-toggle="tab" data-bs-target="#nav-contacts" type="button" role="tab" aria-controls="nav-contacts" aria-selected="false">
+                Contacts
+            </button>
+            <button class="nav-link" id="nav-documents-tab" data-bs-toggle="tab" data-bs-target="#nav-documents" type="button" role="tab" aria-controls="nav-documents" aria-selected="false">
+                Documents
+            </button>
+            <button class="nav-link" id="nav-photos-tab" data-bs-toggle="tab" data-bs-target="#nav-photos" type="button" role="tab" aria-controls="nav-photos" aria-selected="false">
+                Photos
+            </button>
+
+        </div>
+    </nav>
+    <div class="tab-content mt-3" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-action" role="tabpanel" aria-labelledby="nav-action-tab" tabindex="0">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Libellé</th>
+                    <td>{{ action.libelle }} </td>
+                </tr>
+                <tr>
+                    <th>Statut</th>
+                    <td>{{ action.statutAction }} </td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>
+                        {% if action.dateFin %}
+                            du {{ action.dateDebut.format('d/m/Y') }}
+                            au {{ action.dateFin.format('d/m/Y') }}
+                        {% else %}
+                            le {{ action.dateDebut.format('d/m/Y') }}
+                        {% endif %}
+                        {% if action.heureFin and action.heureFin %}
+                            de {{ action.heureDebut.format("H\\hi") }}
+                            à {{ action.heureFin.format("H\\hi") }}
+                        {% elseif action.heureDebut %}
+                            à {{ action.heureDebut.format("H\\hi") }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ action.typeAction }}</td>
+                </tr>
+                <tr>
+                    <th>Thème</th>
+                    <td>{{ action.themeAction }}</td>
+                </tr>
+                <tr>
+                    <th>Rôle ATDEC</th>
+                    <td>{{ action.typePilotage }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ action.description | nl2br }}</td>
+                </tr>
+                <tr>
+                    <th>Lieu</th>
+                    <td>{{ action.lieu }}</td>
+                </tr>
+                <tr>
+                    <th>QPV</th>
+                    <td>
+                        {{ action.getHasQpvTexte }}
+                        {% if action.qpvs|length %}
+                            <ul class="list-unstyled mt-3">
+                                {% for qpv in action.qpvs %}
+                                    <li>{{ qpv }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Type de public</th>
+                    <td>{{ action.typePublics | join(', ') }}</td>
+                </tr>
+                <tr>
+                    <th>Territoires</th>
+                    <td>
+                        <ul class="list-unstyled">
+                            {% for territoire in action.territoires %}
+                                <li>{{ territoire }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Tags</th>
+                    <td>{{ action.tags | join(' - ') }}</td>
+                </tr>
+                <tr>
+                    <th>Création</th>
+                    <td>{{ action.createdByAt }}</td>
+                </tr>
+                <tr>
+                    <th>Dernière modification</th>
+                    <td>{{ action.updatedByAt }}</td>
+                </tr>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ action.id }}</td>
+                </tr>
+                </tbody>
+            </table>
+            {% if is_granted('EDIT', action) %}
+                <a href="{{ path('app_action_edit', {'id': action.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
+                <a href="{{ path('app_action_clone', {'id': action.id}) }}" class="btn btn-sm btn-primary btn-add">dupliquer</a>
+            {% endif %}
+            {{ include('action/_delete_form.html.twig') }}
+        </div>
+
+        <div class="tab-pane fade show" id="nav-pilotage" role="tabpanel" aria-labelledby="nav-pilotage-tab" tabindex="0">
+            {{ include('action/_pilotage.html.twig') }}
+        </div>
+
+        <div class="tab-pane fade show" id="nav-participants" role="tabpanel" aria-labelledby="nav-participants-tab" tabindex="0">
+            {{ include('action/_participants.html.twig') }}
+        </div>
+
+        <div class="tab-pane fade show " id="nav-indicateurs" role="tabpanel" aria-labelledby="nav-indicateurs-tab" tabindex="0">
+            {{ include('action/_indicateurs.html.twig') }}
+        </div>
+
+        <div class="tab-pane fade show " id="nav-contacts" role="tabpanel" aria-labelledby="nav-contacts-tab" tabindex="0">
+            {% if is_granted('ROLE_CONTACT_CREATE') %}
+                <a href="{{ path('app_contact_action_new', {action : action.id}) }}" class="btn btn-primary btn-add btn-sm ">ajouter</a>
+            {% endif %}
+            <div class="row mt-2">
+                {% for contact in action.contacts %}
+                    {{ include('contact/_contact.html.twig') }}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="tab-pane fade show " id="nav-documents" role="tabpanel" aria-labelledby="nav-documents-tab" tabindex="0">
+            {{ include("action/_documents.html.twig") }}
+        </div>
+
+        <div class="tab-pane fade show " id="nav-photos" role="tabpanel" aria-labelledby="nav-photos-tab" tabindex="0">
+            {{ include('action/_photos.html.twig') }}
+        </div>
+    </div>
+
+    <a href="{{ path('app_action_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        import {FrontAutoComplete} from 'frontTools';
+        import {FrontUpdate} from 'frontTools';
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const a = new FrontAutoComplete('pilote-autocomplete', function (id, type) {
+                document.getElementById('inputAddPilote').value = id;
+                document.getElementById('inputAddPiloteType').value = type;
+                document.getElementById('formAddPilote').submit();
+            }, 2, 500);
+
+            const b = new FrontAutoComplete('participant-autocomplete', function (id, type) {
+                document.getElementById('inputAddParticipant').value = id;
+                document.getElementById('inputAddParticipantType').value = type;
+                document.getElementById('formAddParticipant').submit();
+            }, 2, 500);
+
+
+            {% if app.request.query.get('tab') is not null %}
+            let tab = document.getElementById("nav-{{ app.request.query.get('tab') }}-tab");
+            if (tab) {
+                tab.click()
+            }
+            {% endif %}
+
+            document.querySelectorAll('select.selectUpdatable').forEach(function (element) {
+
+                element.addEventListener('change', function () {
+                    new FrontUpdate(element)
+                })
+            })
+
+            document.querySelectorAll('input.updatable').forEach(function (element) {
+                element.addEventListener('change', function () {
+                    new FrontUpdate(element)
+                })
+            })
+
+        });
+
+    </script>
+{% endblock %}

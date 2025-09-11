@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Service{% endblock %}
+
+{% block body %}
+    <h1>Service <span>{{ service }}</span></h1>
+
+    <div class="tab-content mt-3" id="nav-tabContent">
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Libellé</th>
+                <td>{{ service.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Personnes</th>
+                <td>
+                    <ul class="list-unstyled">
+                        {% for personne in service.personnes %}
+                            <li>
+                                {% if is_granted("VIEW", personne) %}
+                                    <a href="{{ path('app_personne_show', {id: personne.id}) }}">{{ personne }}</a>
+                                {% else %}
+                                    {{ personne }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Activé</th>
+                <td>{{ service.enabled ?"Oui":"Non" }}</td>
+            </tr>
+            <tr>
+                <th>Création</th>
+                <td>{{ service.createdByAt }}</td>
+            </tr>
+            <tr>
+                <th>Dernière modification</th>
+                <td>{{ service.updatedByAt }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ service.id }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_service_edit', {'id': service.id}) }}" class="btn btn-sm btn-primary  btn-edit">modifier</a>
+        <a href="{{ path('app_service_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+        {{ include('parametres/service/_delete_form.html.twig') }}
+
+    </div>
+{% endblock %}

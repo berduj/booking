@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes alertes{% endblock %}
+
+{% block body %}
+    <h1>
+        <picto class="alerte-picto"></picto>
+        Mes alertes
+    </h1>
+
+    {% include 'partials/month_pager.html.twig' with {route: 'app_alerte_index_date', route_parameters: {}} %}
+
+    <div>
+        <a href="{{ path('app_alerte_new') }}" class="btn btn-primary btn-sm btn-add">ajouter une alerte</a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Date</th>
+            <th>Libellé</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for alerte in alertes %}
+            <tr>
+                <td class="{{ alerte.enabled ? "alerte-on":"alerte-off" }}"></td>
+                <td>{{ alerte.date.format('d/m/Y') }}</td>
+                <td>{{ alerte.titre }}</td>
+                <td>
+                    {% if is_granted('VIEW', alerte) %}
+                        <a href="{{ path('app_alerte_show', {'id': alerte.id}) }}" class="btn btn-primary btn-sm btn-show">voir</a>
+                    {% endif %}
+                    {% if is_granted('EDIT', alerte) %}
+                        <a href="{{ path('app_alerte_edit', {'id': alerte.id}) }}" class="btn btn-primary btn-sm btn-edit">modifier</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_alerte_new') }}" class="btn btn-primary btn-sm btn-add">ajouter une alerte</a>
+
+{% endblock %}

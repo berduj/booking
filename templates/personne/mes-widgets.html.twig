@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Widgets{% endblock %}
+
+{% block body %}
+
+    <a class="float-end" href="{{ path('app_dashboard_index') }}">Tableau de bord</a>
+    <h1>Choisir mes widgets <span>{{ app.user }}</span></h1>
+    <hr class="mb-4">
+    <table class="table">
+        <tbody class="sortable-entity" data-url="{{ path('app_mes_widgets_order') }}" data-entity="App\Entity\PersonneWidget">
+        {% for widget in personne.widgets %}
+            <tr data-id="{{ widget.id }}">
+                <td class="handle"></td>
+                <td class="clickable on" data-url="{{ path('app_mes_widgets_toggle') }}" data-id="{{ widget.id }}"></td>
+                <td>{{ widget }}</td>
+            </tr>
+        {% endfor %}
+        {% for widget in personne.profil.widgets %}
+            {% if not personne.hasWidget(widget) %}
+                <tr data-id="{{ widget.id }}">
+                    <td class="handle"></td>
+                    <td class="clickable off" data-url="{{ path('app_mes_widgets_toggle') }}" data-id="{{ widget.id }}"></td>
+                    <td>{{ widget }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+
+        import {FrontToggle} from 'frontTools';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('td.clickable').forEach(function (element) {
+                element.addEventListener('click', function () {
+                    new FrontToggle(element)
+                })
+            })
+        });
+    </script>
+{% endblock %}
+

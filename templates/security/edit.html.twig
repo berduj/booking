@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon mot de passe {% endblock %}
+
+{% block body %}
+    <h1>Modifier mon mot de passe <span>{{ user }}</span></h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-primary btn-sm">enregistrer</button>
+    <a href="{{ path('app_showme',) }}" class="btn btn-sm btn-primary btn-back">retour</a>
+    {{ form_end(form) }}
+{% endblock %}

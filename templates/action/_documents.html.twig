@@ -1,0 +1,43 @@
+<table class="table table-striped ">
+    <thead>
+    <tr>
+        <th>Nom du fichier</th>
+        <th>Auteur</th>
+        <th>Date</th>
+        <th></th>
+    </tr>
+    </thead>
+    {% for document in documents %}
+        <tr>
+            <td>
+                <a href="{{ path('app_action_view_document', {action: action.id, document: document.id}) }}" target="_blank">{{ document.titre }}</a>
+            </td>
+            <td>{{ document.createdBy }}</td>
+            <td>{{ document.createdAt.format("d/m/Y H:i:s") }}</td>
+            <td>
+                {% if is_granted("EDIT", action) %}
+                    <a href="{{ path('app_action_delete_document', {action : action.id, document: document.id}) }}"
+                       class="btn btn-primary btn-sm btn-delete"
+                       onclick="return(confirm('Supprimer ce document ?'))"
+                    >suppr</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<div class="row">
+    <div class="col-6"></div>
+    <div class="col-6 mt-5">
+
+        <div class="card">
+            <div class="card-header"> Ajouter un document</div>
+            <div class="card-body">
+                {{ form_start(formDocument) }}
+                {{ form_widget(formDocument) }}
+                <button class="btn btn-primary btn-sm btn-add">ajouter</button>
+                {{ form_end(formDocument) }}
+            </div>
+        </div>
+    </div>
+</div>

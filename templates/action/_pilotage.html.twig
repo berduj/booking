@@ -1,0 +1,82 @@
+<p class="mb-5">Rôle ATDEC : {{ action.typePilotage }}</p>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Structure</th>
+        <th>Personne</th>
+        <th>Rôle</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for actionPilotage in action.actionPilotages %}
+        <tr>
+            <td>
+                {% if actionPilotage.structure %}
+                    {{ actionPilotage.structure }}
+                {% elseif is_granted('EDIT', action) and actionPilotage.availableStructures|length > 0 %}
+                    <select class="form-select selectUpdatable" data-id="{{ actionPilotage.id }}" data-url="{{ path('app_action_edit_pilotage_structure') }}">
+                        <option value=""></option>
+                        {% for structure in actionPilotage.availableStructures %}
+                            <option value="{{ structure.id }}" {{ structure == actionPilotage.structure ? "SELECTED":"" }} >{{ structure }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </td>
+            <td>
+                {% if actionPilotage.personne %}
+                    {% if is_granted('VIEW',actionPilotage.personne) %}
+                        <a href="{{ path('app_personne_show', {id: actionPilotage.personne.id}) }}">{{ actionPilotage.personne }}</a>
+                    {% else %}
+                        {{ actionPilotage.personne }}
+                    {% endif %}
+                {% elseif is_granted('EDIT', action) and actionPilotage.availablePersonnes|length > 0 %}
+                    <select class="form-select selectUpdatable" data-id="{{ actionPilotage.id }}" data-url="{{ path('app_action_edit_pilotage_personne') }}">
+                        <option value=""></option>
+                        {% for personne in actionPilotage.availablePersonnes %}
+                            <option value="{{ personne.id }}" {{ personne == actionPilotage.personne ? "SELECTED":"" }} >{{ personne }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </td>
+            <td>
+                {% if is_granted('EDIT', action) %}
+                    <select class="form-select selectUpdatable" data-id="{{ actionPilotage.id }}" data-url="{{ path('app_action_edit_type_pilotage') }}">
+                        <option value=""></option>
+                        {% for type in typePilotages %}
+                            <option value="{{ type.id }}" {{ type == actionPilotage.typePilotage ? "SELECTED":"" }} >{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    {{ actionPilotage.typePilotage }}
+                {% endif %}
+            </td>
+            <td>
+                {% if is_granted('EDIT',action) %}
+                    <a href="{{ path('app_action_remove_pilote', {id: actionPilotage.id, action: action.id}) }}"
+                       onclick="return(confirm('Retirer ce pilote ?'))"
+                       class=" btn btn-sm btn-delete">suppr</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if is_granted('EDIT', action) %}
+    <div class="mt-5 mb-4">
+        <div class="autocomplete" style="width: 30em!important;">
+            <label for="pilote-autocomplete">Ajouter un pilote : </label>
+            <input type="text" class="form-control" placeholder="saisissez un nom de personne ou d'entreprise" id="pilote-autocomplete" data-value=""
+                   data-url="{{ path('app_action_pilote_autocomplete') }}"/>
+            <form action="{{ path('app_action_add_pilote') }}" method="post" id="formAddPilote">
+                <input type="hidden" name="action" value="{{ action.id }}">
+                <input type="hidden" id='inputAddPilote' name="pilote" value="">
+                <input type="hidden" id='inputAddPiloteType' name="type" value="">
+            </form>
+        </div>
+        <br/>
+        <small class="info">La personne ou l'entreprise doit préalablement avoir été créée <br/> dans l'onglet "Personne" ou "Structure" </small>
+    </div>
+
+{% endif %}

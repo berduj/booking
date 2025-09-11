@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fusion de personnes{% endblock %}
+
+{% block body %}
+    <h1><picto class="personne-picto"></picto>Fusion de personnes</h1>
+    <p>Pouvoir pouvoir fusionner 2 fiches personnes :</p>
+    <ul>
+        <li>les 2 personnes doivent avoir le même nom et le même prénom</li>
+        
+        <li>la personne à conserver doit être active</li>
+        <li>la personne à supprimer doit être désactivée</li>
+        <li>la personne à supprimer doit avoir "fusionner" dans la Fonction</li>
+    </ul>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Personne à supprimer</th>
+            <th>A fusionner dans</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for personneDelete in personnes %}
+            {% for personneKeep in finder.findKeepable(personneDelete) %}
+                <tr>
+                    <td>
+                        {{ personneDelete }}<br/>{{ personneDelete.email |nl2br }}<br/>
+                        {{ personneDelete.telephoneMobile }} {{ personneDelete.telephoneFixe }}<br/>
+                        Identifiant: {{  personneDelete.username }}<br/>
+                        Fonction: {{ personneDelete.fonction }}
+                    </td>
+                    <td>
+                        {{ personneKeep }}<br/>{{ personneKeep.email |nl2br }}<br/>
+                        {{ personneKeep.telephoneMobile }} {{ personneKeep.telephoneFixe }}<br/>
+                        Identifiant: {{  personneKeep.username }}<br/>
+                        Fonction: {{ personneKeep.fonction }}
+                    </td>
+                    <td>
+                        <form method="post">
+                            <input type="hidden" name="keep" value="{{ personneKeep.id }}">
+                            <input type="hidden" name="delete" value="{{ personneDelete.id }}">
+                            <button type="submit" class="btn btn-sm btn-merge btn-primary">fusionner</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notes{% endblock %}
+
+{% block body %}
+    <h1>Notes</h1>
+
+    {% include 'partials/month_pager.html.twig' with { route: 'app_note_index_date', 'yearMonth': yearMonth, route_parameters: {} } %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Auteur</th>
+            <th>Note</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for note in notes %}
+            <tr>
+                <td>{{ note.auteur }}  </td>
+                <td>{{ note }}</td>
+                <td>
+                    {% if is_granted('VIEW', note) %}
+                        <a href="{{ path('app_note_show', {'id': note.id}) }}" class="btn btn-primary btn-sm">voir</a>
+                    {% endif %}
+                    {% if is_granted('EDIT', note) %}
+                        <a href="{{ path('app_note_edit', {'id': note.id}) }}" class="btn btn-primary btn-sm btn-edit">modifier</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if is_granted('ROLE_NOTE_EDIT') %}
+        <a href="{{ path('app_note_new') }}" class="btn btn-primary btn-sm btn-add">ajouter</a>
+    {% endif %}
+{% endblock %}

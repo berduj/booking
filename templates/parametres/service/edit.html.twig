@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier service{% endblock %}
+
+{% block body %}
+    <h1>Modifier service <span>{{ service }}</span></h1>
+
+    {{ include('parametres/service/_form.html.twig') }}
+    {{ include('parametres/service/_delete_form.html.twig') }}
+{% endblock %}

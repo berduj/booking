@@ -1,0 +1,104 @@
+{# https://getbootstrap.com/docs/5.3/components/navbar/ #}
+
+<nav class="navbar navbar-expand-lg top-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Batard-Booking</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            {% if is_granted('IS_AUTHENTICATED') %}
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ path('app_dashboard_index') }}">Accueil</a>
+                    </li>
+                    {% if is_granted('ROLE_STRUCTURE_VIEW') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_structure_index') }}">Structures</a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_PERSONNE_VIEW') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_personne_index') }}">Personnes</a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_CONTACT_VIEW') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_contact_index') }}">Contacts</a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_PARAMETRAGE') or  is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Paramètres
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li><a class="dropdown-item" href="{{ path('app_profil_index') }}">Profils</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_widget_index') }}">Widgets</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                {% endif %}
+                                {% if is_granted('ROLE_PARAMETRAGE') %}
+                                    <li><a class="dropdown-item" href="{{ path('app_filiere_index') }}">Filières</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_metier_index') }}">Métiers</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_departementDomaine_index') }}">Départements/Domaines</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_tag_index') }}">Tags</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_typeStructure_index') }}">Types de structures</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_modaliteContact_index') }}">Modalités de contact</a></li>
+
+
+                                {% endif %}
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{{ path('app_export_index') }}">Paramétrage Exports par requêtes</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Outils
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a class="dropdown-item" href="{{ path('app_merge_personne') }}">Fusionner personnes</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_merge_structure') }}">Fusionner structures</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_security_log') }}">Journal de connexions</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{{ path('app_export_public') }}">Exports par requêtes</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+            {% endif %}
+
+            {% if is_granted('IS_AUTHENTICATED') %}
+                <a href="{{ path('app_showme') }}" class="btn btn-outline-danger ms-2 me-2" title="{{ app.user.profil }}">{{ app.user }}</a>
+                {% if is_granted('IS_IMPERSONATOR') %}
+                    <a class="btn btn-danger me-2 btn-impersonate" href="{{ impersonation_exit_path(path('app_personne_index')) }}">Exit imp.</a>
+                {% else %}
+                    <a class="btn btn-outline-primary btn-logout me-2" href="{{ path('app_logout') }}">Déconnexion</a>
+                {% endif %}
+            {% else %}
+                <a class="btn btn-login btn-outline-success me-2" href="{{ path('app_dashboard_index') }}">Connexion</a>
+            {% endif %}
+
+            {% if is_granted('IS_AUTHENTICATED') %}
+                <div class="autocomplete">
+                    <input class="form-control me-2"
+                           type="search"
+                           placeholder="Rechercher"
+                           aria-label="Rechercher"
+                           id="typehead"
+                           data-url="{{ path('typehead_autocomplete') }}"
+                           autocomplete="off"
+                    >
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</nav>

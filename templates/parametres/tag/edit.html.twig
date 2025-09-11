@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier tag{% endblock %}
+
+{% block body %}
+    <h1>Modifier métier <span>{{ tag }}</span></h1>
+
+    {{ include('parametres/tag/_form.html.twig') }}
+    {{ include('parametres/tag/_delete_form.html.twig') }}
+{% endblock %}

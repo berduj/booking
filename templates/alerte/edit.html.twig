@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier alerte{% endblock %}
+
+{% block body %}
+    <h1><picto class="alerte-picto"></picto>Modifier alerte <span>{{ alerte }}</span></h1>
+
+    {{ include('alerte/_form.html.twig') }}
+    {{ include('alerte/_delete_form.html.twig') }}
+{% endblock %}

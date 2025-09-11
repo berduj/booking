@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Export par requête {% endblock %}
+
+{% block body %}
+    <h1>Modifier Export par requête <span>{{ export }}</span></h1>
+
+    {{ include('parametres/export/_form.html.twig') }}
+    {{ include('parametres/export/_delete_form.html.twig') }}
+{% endblock %}

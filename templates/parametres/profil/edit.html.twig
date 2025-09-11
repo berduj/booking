@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier profil{% endblock %}
+
+{% block body %}
+    <h1>Modifier profil <span>{{ profil }}</span></h1>
+
+    {{ include('parametres/profil/_form.html.twig') }}
+    {{ include('parametres/profil/_delete_form.html.twig') }}
+{% endblock %}

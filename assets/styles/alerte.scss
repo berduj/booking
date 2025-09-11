@@ -1,0 +1,52 @@
+div.atdec-alerte {
+  border: 1px solid #afaf23;
+  background-color: #f4f46a;
+  padding: 0;
+  margin-bottom: 1em;
+
+  div.title {
+    padding: 0.2em 1em;
+    font-size: 1em;
+    font-weight: bold;
+    color: black;
+    background-color: #eded3f;
+    border-bottom: 1px solid #afaf23;
+    text-align: center;
+  }
+
+  div.command {
+    font-size: .9em;
+    padding: 3px;
+  }
+
+  div.value-normal {
+    font-size: .9em;
+    padding: 3px 5px;
+    overflow-y: auto;
+    height: 10em;
+  }
+}
+
+ .alerte-on, .alerte-off {
+  width: 1em;
+  font-family: 'Font Awesome\ 5 Free';
+}
+
+.alerte-on:after {
+  content: "\f0f3";
+  font-weight: 900;
+  color: #333;
+  font-family: 'Font Awesome\ 5 Free';
+}
+
+.alerte-off:after {
+  content: "\f1f6";
+  font-weight: 900;
+  color: #DDD;
+  font-family: 'Font Awesome\ 5 Free';
+}
+.disable-alerte {
+  color: black;
+  font-width: bold;
+  padding: 0 3px;
+}

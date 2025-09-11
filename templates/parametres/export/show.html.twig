@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Export par requête{% endblock %}
+
+{% block body %}
+    <h1>Export par requête <span>{{ export }}</span></h1>
+
+    <div class="tab-content mt-3" id="nav-tabContent">
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Libellé</th>
+                <td>{{ export.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Requête SQL</th>
+                <td>
+                    <code>
+                    {{ export.requete |nl2br }}
+                    </code>
+                </td>
+            </tr>
+            <tr>
+                <th>Profils autorisés</th>
+                <td>{{ export.profils |join(', ') }}</td>
+            </tr>
+            <tr>
+                <th>Activé</th>
+                <td>{{ export.enabled ?"Oui":"Non" }}</td>
+            </tr>
+            <tr>
+                <th>Création</th>
+                <td>{{ export.createdByAt }}</td>
+            </tr>
+            <tr>
+                <th>Dernière modification</th>
+                <td>{{ export.updatedByAt }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ export.id }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_export_edit', {'id': export.id}) }}" class="btn btn-sm btn-primary  btn-edit">modifier</a>
+        <a href="{{ path('app_export_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+
+
+        {% if is_granted('EXECUTE', export) %}
+            <a href="{{ path('app_export_execute', {'id': export.id}) }}" class="btn btn-primary btn-sm btn-export">exporter</a>
+        {% endif %}
+        {{ include('parametres/export/_delete_form.html.twig') }}
+
+    </div>
+{% endblock %}

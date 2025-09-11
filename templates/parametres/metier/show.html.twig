@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Métier{% endblock %}
+
+{% block body %}
+    <h1>Métier <span>{{ metier }}</span></h1>
+
+    <div class="tab-content mt-3" id="nav-tabContent">
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Libellé</th>
+                <td>{{ metier.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Activé</th>
+                <td>{{ metier.enabled ?"Oui":"Non" }}</td>
+            </tr>
+            <tr>
+                <th>Création</th>
+                <td>{{ metier.createdByAt }}</td>
+            </tr>
+            <tr>
+                <th>Dernière modification</th>
+                <td>{{ metier.updatedByAt }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ metier.id }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_metier_edit', {'id': metier.id}) }}" class="btn btn-sm btn-primary  btn-edit">modifier</a>
+        <a href="{{ path('app_metier_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+        {{ include('parametres/metier/_delete_form.html.twig') }}
+
+    </div>
+{% endblock %}

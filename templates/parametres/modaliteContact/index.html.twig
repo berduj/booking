@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modalités de contact{% endblock %}
+
+{% block body %}
+    <h1>Modalités de contact</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Libellé</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody class="sortable-entity" data-url="{{ path('sortable_entity') }}" data-entity="App\Entity\ModaliteContact">
+        {% for modaliteContact in modaliteContacts %}
+            <tr data-id="{{ modaliteContact.id }}">
+                <td class="handle"></td>
+                <td class="{{ modaliteContact.enabled?"on":"off" }}"></td>
+                <td>{{ modaliteContact.libelle }}</td>
+                <td>
+                    <a href="{{ path('app_modaliteContact_show', {'id': modaliteContact.id}) }}" class="btn btn-primary btn-sm btn-show">voir</a>
+                    <a href="{{ path('app_modaliteContact_edit', {'id': modaliteContact.id}) }}" class="btn btn-primary btn-sm btn-edit">modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_modaliteContact_new') }}" class="btn btn-primary btn-sm btn-add">ajouter</a>
+{% endblock %}

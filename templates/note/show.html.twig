@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ note }}{% endblock %}
+
+{% block body %}
+
+    <h1>Note <span>{{ note.auteur }}</span></h1>
+
+    <div class="tab-pane fade show active" id="nav-note" role="tabpanel" aria-labelledby="nav-note-tab" tabindex="0">
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Texte</th>
+                <td>
+                    <div class="note">{{ note.texte|nl2br }}</div>
+                </td>
+            </tr>
+            <tr>
+                <th>Structures</th>
+                <td>
+                    <div class="row">
+                        <div class="col">
+                            <ul class="list-unstyled">
+                                {% for structure in note.structures %}
+                                    <li>
+                                        {% if is_granted('ROLE_STRUCTURE_VIEW') %}
+                                            <a href="{{ path('app_structure_show', {id: structure.id, tab: "notes"}) }}">{{ structure }}</a>
+                                        {% else %}
+                                            {{ structure }}
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% if is_granted('EDIT', note) %}
+                            <div class="col">
+                                <div class="autocomplete">
+                                    <label for="structure-autocomplete">Ajouter une structure : </label>
+                                    <input type="text" class="form-control" placeholder="saisissez un nom" id="structure-autocomplete" data-value=""
+                                           data-url="{{ path('app_note_structure_autocomplete') }}"/>
+                                    <form action="{{ path('app_note_add_structure') }}" method="post" id="formAddStructure">
+                                        <input type="hidden" name="note" value="{{ note.id }}">
+                                        <input type="hidden" id='inputAddStructure' name="structure" value="">
+                                    </form>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Personnes</th>
+                <td>
+                    <div class="row">
+                        <div class="col">
+                            <ul class="list-unstyled">
+                                {% for personne in note.personnes %}
+                                    <li>
+                                        {% if is_granted('ROLE_PERSONNE_VIEW') %}
+                                            <a href="{{ path('app_personne_show', {id: personne.id, tab: "notes"}) }}">{{ personne }}</a>
+                                        {% else %}
+                                            {{ personne }}
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% if is_granted('EDIT', note) %}
+                            <div class="col">
+                                <div class="col">
+                                    <div class="autocomplete">
+                                        <label for="structure-autocomplete">Ajouter une personne : </label>
+                                        <input type="text" class="form-control" placeholder="saisissez un nom" id="personne-autocomplete" data-value=""
+                                               data-url="{{ path('app_note_personne_autocomplete') }}"/>
+                                        <form action="{{ path('app_note_add_personne') }}" method="post" id="formAddPersonne">
+                                            <input type="hidden" name="note" value="{{ note.id }}">
+                                            <input type="hidden" id='inputAddPersonne' name="personne" value="">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <th>Auteur</th>
+                <td>{{ note.auteur }}</td>
+            </tr>
+
+            <tr>
+                <th>Création</th>
+                <td>{{ note.createdByAt }}</td>
+            </tr>
+            <tr>
+                <th>Dernière modification</th>
+                <td>{{ note.updatedByAt }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ note.id }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        {% if is_granted('EDIT', note) %}
+            <a href="{{ path('app_note_edit', {'id': note.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
+        {% endif %}
+        <a href="{{ path('app_note_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+        {{ include('note/_delete_form.html.twig') }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        import {FrontAutoComplete} from 'frontTools';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            new FrontAutoComplete('structure-autocomplete', function (id) {
+                document.getElementById('inputAddStructure').value = id;
+                document.getElementById('formAddStructure').submit();
+            }, 2, 500);
+
+            new FrontAutoComplete('personne-autocomplete', function (id) {
+                document.getElementById('inputAddPersonne').value = id;
+                document.getElementById('formAddPersonne').submit();
+            }, 2, 500);
+
+
+            {% if app.request.query.get('tab') is not null %}
+            let tab = document.getElementById("nav-{{ app.request.query.get('tab') }}-tab");
+            if (tab) {
+                tab.click()
+            }
+            {% endif %}
+        });
+
+    </script>
+{% endblock %}

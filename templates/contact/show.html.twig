@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact : {{ contact }}{% endblock %}
+
+{% block body %}
+
+    <h1>
+        <picto class="contact-picto"></picto>
+        Contact <span>{{ contact }}</span></h1>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="true">
+                Contact
+            </button>
+
+            <button class="nav-link" id="nav-interlocuteurs-tab" data-bs-toggle="tab" data-bs-target="#nav-interlocuteurs" type="button" role="tab" aria-controls="nav-interlocuteurs"
+                    aria-selected="false">
+                Interlocuteurs
+            </button>
+        </div>
+    </nav>
+
+    <div class="tab-content mt-3" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Auteur</th>
+                    <td>{{ contact.auteur }} </td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{{ contact.date.format('d/m/Y') }} </td>
+                </tr>
+                <tr>
+                    <th>Modalité</th>
+                    <td>{{ contact.modaliteContact }} </td>
+                </tr>
+                <tr>
+                    <th>Titre</th>
+                    <td>{{ contact.titre }}</td>
+                </tr>
+                <tr>
+                    <th>Compte rendu</th>
+                    <td>{{ contact.compteRendu|nl2br }}</td>
+                </tr>
+
+                <tr>
+                    <th>Interlocuteurs</th>
+                    <td>
+                        <table class="table table-sm table-borderless">
+                            {% for interlocuteur in contact.interlocuteurs %}
+                                <tr>
+                                    <td>
+                                        {% if is_granted("VIEW", interlocuteur.personne) %}
+                                            <a href="{{ path('app_personne_show', {id: interlocuteur.personne.id}) }}">{{ interlocuteur.personne }}</a>
+                                        {% else %}
+                                            {{ interlocuteur.personne }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if is_granted("VIEW", interlocuteur.structure) %}
+                                            <a href="{{ path('app_structure_show', {id: interlocuteur.structure.id}) }}">{{ interlocuteur.structure }}</a>
+                                        {% else %}
+                                            {{ interlocuteur.structure }}
+                                        {% endif %}
+                                        </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Autres interlocuteurs</th>
+                    <td>{{ contact.autresInterlocuteurs |nl2br }}</td>
+                </tr>
+                {% if contact.filename %}
+                <tr>
+                    <th>Fichier joint</th>
+                    <td><a href="{{ path('app_contact_view_document', { contact: contact.id}) }}" target="_blank">voir</a></td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Création</th>
+                    <td>{{ contact.createdByAt }}</td>
+                </tr>
+                <tr>
+                    <th>Dernière modification</th>
+                    <td>{{ contact.updatedByAt }}</td>
+                </tr>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ contact.id }}</td>
+                </tr>
+                </tbody>
+            </table>
+            {% if is_granted('EDIT', contact) %}
+                <a href="{{ path('app_contact_edit', {'id': contact.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
+            {% endif %}
+
+            {{ include('contact/_delete_form.html.twig') }}
+        </div>
+        <div class="tab-pane fade show " id="nav-interlocuteurs" role="tabpanel" aria-labelledby="nav-interlocuteurs-tab" tabindex="1">
+            {{ include('contact/_interlocuteurs.html.twig') }}
+        </div>
+
+    </div>
+
+
+
+    <a href="{{ path('app_contact_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        import {FrontAutoComplete} from 'frontTools';
+        import {FrontUpdate} from 'frontTools';
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const b = new FrontAutoComplete('interlocuteur-autocomplete', function (id, type) {
+                document.getElementById('inputAddInterlocuteur').value = id;
+                document.getElementById('inputAddInterlocuteurType').value = type;
+                document.getElementById('formAddInterlocuteur').submit();
+            }, 2, 500);
+
+            document.querySelectorAll('select.selectUpdatable').forEach(function (element) {
+                element.addEventListener('change', function () {
+                    new FrontUpdate(element)
+                })
+            })
+
+            {% if app.request.query.get('tab') is not null %}
+            let tab = document.getElementById("nav-{{ app.request.query.get('tab') }}-tab");
+            if (tab) {
+                tab.click()
+            }
+            {% endif %}
+        });
+
+    </script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tag {{ tag }}{% endblock %}
+
+{% block body %}
+    <h1>Tag <span>{{ tag }}</span></h1>
+
+    <div class="tab-content mt-3" id="nav-tabContent">
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Type de tag</th>
+                <td>{{ tag.type }}</td>
+            </tr>
+            <tr>
+                <th>Libellé</th>
+                <td>{{ tag.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Activé</th>
+                <td>{{ tag.enabled ?"Oui":"Non" }}</td>
+            </tr>
+            <tr>
+                <th>Création</th>
+                <td>{{ tag.createdByAt }}</td>
+            </tr>
+            <tr>
+                <th>Dernière modification</th>
+                <td>{{ tag.updatedByAt }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ tag.id }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_tag_edit', {'id': tag.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
+        <a href="{{ path('app_tag_index', {tab: tag.type}) }}" class="btn btn-sm btn-primary btn-back">retour</a>
+        {{ include('parametres/tag/_delete_form.html.twig') }}
+
+    </div>
+{% endblock %}

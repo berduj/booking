@@ -1,0 +1,9 @@
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+<button class="btn btn-primary btn-sm">enregistrer</button>
+{% if profil.id %}
+    <a href="{{ path('app_profil_show', {id: profil.id}) }}" class="btn btn-sm btn-primary btn-back">retour</a>
+{% else %}
+    <a href="{{ path('app_profil_index',) }}" class="btn btn-sm btn-primary btn-back">retour</a>
+{% endif %}
+{{ form_end(form) }}

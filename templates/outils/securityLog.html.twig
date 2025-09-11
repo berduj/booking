@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Journal de connexions{% endblock %}
+
+{% block body %}
+    <h1>
+        <picto class="personne-picto"></picto>
+        Journal de connexions
+    </h1>
+
+    {% include 'partials/numeric_pager.html.twig' with { route: 'app_security_log_page', 'page': page, 'nbPages': nbPages } %}
+
+    <p>{{ (page-1)*nbParPages +1 }}-{{ (page)*nbParPages > total ? total : (page)*nbParPages }}
+
+        / {{ total }} enregistrements</p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Personne</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for securityLog in securityLogs %}
+            <tr>
+                <td>
+                    {% if securityLog.personne %}
+                    {{ securityLog.personne }}
+                    {% else %}
+                        <b><i>{{ securityLog.personneNom }}</i></b>
+                        {% endif %}
+
+                </td>
+                <td>{{ securityLog.date.format('d/m/Y H:i:s') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

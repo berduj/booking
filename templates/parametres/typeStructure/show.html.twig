@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Type de structure{% endblock %}
+
+{% block body %}
+    <h1>Type de structure <span>{{ typeStructure }}</span></h1>
+
+    <div class="tab-content mt-3" id="nav-tabContent">
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Libellé</th>
+                <td>{{ typeStructure.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Activé</th>
+                <td>{{ typeStructure.enabled ?"Oui":"Non" }}</td>
+            </tr>
+            <tr>
+                <th>Création</th>
+                <td>{{ typeStructure.createdByAt }}</td>
+            </tr>
+            <tr>
+                <th>Dernière modification</th>
+                <td>{{ typeStructure.updatedByAt }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ typeStructure.id }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_typeStructure_edit', {'id': typeStructure.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
+        <a href="{{ path('app_typeStructure_index') }}" class="btn btn-sm btn-primary btn-back">retour</a>
+        {{ include('parametres/typeStructure/_delete_form.html.twig') }}
+
+    </div>
+{% endblock %}

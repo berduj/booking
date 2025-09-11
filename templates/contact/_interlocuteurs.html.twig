@@ -1,0 +1,70 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Personne</th>
+        <th>Structure</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for interlocuteur in contact.interlocuteurs %}
+        <tr>
+            <td>
+                {% if interlocuteur.personne %}
+                    {% if is_granted("VIEW", interlocuteur.personne) %}
+                        <a href="{{ path('app_personne_show', {id: interlocuteur.personne.id}) }}">{{ interlocuteur.personne }}</a>
+                    {% else %}
+                        {{ interlocuteur.personne }}
+                    {% endif %}
+                {% elseif is_granted('EDIT', contact) and interlocuteur.availablePersonnes|length > 0 %}
+                    <select class="form-select selectUpdatable" data-id="{{ interlocuteur.id }}" data-url="{{ path('app_contact_edit_interlocuteur_personne') }}">
+                        <option value=""></option>
+                        {% for personne in interlocuteur.availablePersonnes %}
+                            <option value="{{ personne.id }}" {{ personne == interlocuteur.personne ? "SELECTED":"" }} >{{ personne }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </td>
+            <td>
+                {% if interlocuteur.structure %}
+                    {% if is_granted("VIEW", interlocuteur.structure) %}
+                        <a href="{{ path('app_structure_show', {id: interlocuteur.structure.id}) }}">{{ interlocuteur.structure }}</a>
+                    {% else %}
+                        {{ interlocuteur.structure }}
+                    {% endif %}
+                {% elseif is_granted('EDIT', contact) and interlocuteur.availableStructures|length > 0 %}
+                    <select class="form-select selectUpdatable" data-id="{{ interlocuteur.id }}" data-url="{{ path('app_contact_edit_interlocuteur_structure') }}">
+                        <option value=""></option>
+                        {% for structure in interlocuteur.availableStructures %}
+                            <option value="{{ structure.id }}" {{ structure == interlocuteur.structure ? "SELECTED":"" }} >{{ structure }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if is_granted('EDIT',contact) %}
+                    <a href="{{ path('app_contact_remove_interlocuteur', {id: interlocuteur.id, contact: contact.id}) }}"
+                       onclick="return(confirm('Retirer ce interlocuteur ?'))"
+                       class=" btn btn-sm btn-delete">suppr</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% if is_granted('EDIT', contact) %}
+    <div class="mt-1 mb-4">
+        <div class="autocomplete" style="width: 30em!important;">
+            <label for="interlocuteur-autocomplete">Ajouter un interlocuteur : </label>
+            <input type="text" class="form-control" placeholder="saisissez un nom de personne ou d'entreprise" id="interlocuteur-autocomplete" data-value=""
+                   data-url="{{ path('app_contact_interlocuteur_autocomplete') }}"/>
+            <form action="{{ path('app_contact_add_interlocuteur') }}" method="post" id="formAddInterlocuteur">
+                <input type="hidden" name="contact" value="{{ contact.id }}">
+                <input type="hidden" id='inputAddInterlocuteur' name="interlocuteur" value="">
+                <input type="hidden" id='inputAddInterlocuteurType' name="type" value="">
+            </form>
+        </div>
+    </div>
+{% endif %}

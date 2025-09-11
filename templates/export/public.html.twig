@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Export par requêtes{% endblock %}
+
+{% block body %}
+
+    <h1>
+        <picto class="export-picto"></picto>
+        Exports par requête
+    </h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Export</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for export in exports %}
+            <tr>
+                <td>{{ export }}</td>
+                <td>
+                    {% if is_granted("EXECUTE",export) %}
+                        {% if is_granted('EXECUTE', export) %}
+                            <a href="{{ path('app_export_execute', {'id': export.id}) }}" class="btn btn-primary btn-sm btn-export">exporter</a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">Aucun export disponible</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

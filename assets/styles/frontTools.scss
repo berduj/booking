@@ -46,7 +46,7 @@
   font-family: 'Font Awesome\ 5 Free';
 }
 
-.personne-picto, .structure-picto, .action-picto, .contact-picto, .export-picto, .alerte-picto {
+.artiste-picto, .personne-picto, .structure-picto, .action-picto, .contact-picto, .export-picto, .alerte-picto {
   font-size: .8em;
   font-family: 'Font Awesome\ 5 Free';
   margin-right: .4em;
@@ -60,6 +60,11 @@
 
 .personne-picto:after {
   content: "\f007";
+  font-weight: bold;
+}
+
+.artiste-picto:after {
+  content: "\f530";
   font-weight: bold;
 }
 

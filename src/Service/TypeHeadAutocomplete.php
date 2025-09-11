@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Artiste;
 use App\Entity\Personne;
 use App\Entity\Structure;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,7 +39,9 @@ class TypeHeadAutocomplete
         if ($this->security->isGranted('ROLE_STRUCTURE_VIEW')) {
             $ret = array_merge($ret, $this->getStructures($query));
         }
-
+        if ($this->security->isGranted('ROLE_ARTISTE_VIEW')) {
+            $ret = array_merge($ret, $this->getArtistes($query));
+        }
         return $ret;
     }
 
@@ -50,7 +53,7 @@ class TypeHeadAutocomplete
         $personnes = $this->entityManager->getRepository(Personne::class)->createQueryBuilder('p')
             ->where('p.nom LIKE :query OR p.prenom LIKE :query')
             ->andWhere('p.enabled = true')
-            ->setParameter('query', '%'.$query.'%')
+            ->setParameter('query', '%' . $query . '%')
             ->setMaxResults(10)
             ->addOrderBy('p.nom')
             ->addOrderBy('p.prenom')
@@ -85,7 +88,7 @@ class TypeHeadAutocomplete
         $structures = $this->entityManager->getRepository(Structure::class)->createQueryBuilder('e')
             ->where($filtre)
             ->andWhere('e.enabled = true')
-            ->setParameter('query', '%'.$query.'%')
+            ->setParameter('query', '%' . $query . '%')
             ->setMaxResults(10)
             ->addOrderBy('e.raisonSociale')
             ->getQuery()->getResult();
@@ -107,18 +110,18 @@ class TypeHeadAutocomplete
 
     private function getLibelle(Structure $structure, string $query): string
     {
-        if (strlen($query) > self::NB_CAR_RECHERCHE_SIRET && str_contains((string) $structure->getSiret(), $query)) {
-            return (string) $structure.' ('.$structure->getSiret().')';
+        if (strlen($query) > self::NB_CAR_RECHERCHE_SIRET && str_contains((string)$structure->getSiret(), $query)) {
+            return (string)$structure . ' (' . $structure->getSiret() . ')';
         }
 
         if ($structure->getNom() === null) {
-            return (string) $structure;
+            return (string)$structure;
         }
 
         if (str_contains($structure->getNom(), $query)) {
             $libelleStructure = $structure->getNom();
             if ($structure->getNom() !== $structure->getRaisonSociale()) {
-                $libelleStructure .= ' ('.$structure->getRaisonSociale().')';
+                $libelleStructure .= ' (' . $structure->getRaisonSociale() . ')';
             }
 
             return $libelleStructure;
@@ -126,9 +129,37 @@ class TypeHeadAutocomplete
 
         $libelleStructure = $structure->getRaisonSociale();
         if ($structure->getNom() !== $structure->getRaisonSociale()) {
-            $libelleStructure .= ' ('.$structure->getNom().')';
+            $libelleStructure .= ' (' . $structure->getNom() . ')';
         }
 
-        return (string) $libelleStructure;
+        return (string)$libelleStructure;
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    private function getArtistes(string $query): array
+    {
+        $artistes = $this->entityManager->getRepository(Artiste::class)->createQueryBuilder('a')
+            ->where('a.nom LIKE :query')
+            ->andWhere('a.enabled = true')
+            ->setParameter('query', '%' . $query . '%')
+            ->setMaxResults(10)
+            ->addOrderBy('a.nom')
+            ->getQuery()->getResult();
+
+        $ret = [];
+
+        if (count($artistes)) {
+            foreach ($artistes as $artiste) {
+                $ret[] = [
+                    'label' => $artiste->__toString(),
+                    'id' => $this->router->generate('app_artiste_show', ['id' => $artiste->getId()]),
+                    'type' => 'artiste-picto',
+                ];
+            }
+        }
+
+        return $ret;
     }
 }

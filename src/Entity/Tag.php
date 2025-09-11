@@ -22,8 +22,7 @@ class Tag implements SortableEntityInterface, \Stringable
 
     public const TYPE_STRUCTURE = 'Structure';
     public const TYPE_PERSONNE = 'Personne';
-    public const TYPE_THEMATIQUE = 'Thématique';
-    public const TYPES = [self::TYPE_STRUCTURE, self::TYPE_PERSONNE, self::TYPE_THEMATIQUE];
+    public const TYPES = [self::TYPE_STRUCTURE, self::TYPE_PERSONNE];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

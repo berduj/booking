@@ -77,7 +77,7 @@ class PersonneType extends AbstractType
             ->add('username', TextType::class, [
                 'label' => 'Identifiant',
                 'required' => false,
-                'attr' => ['autocomplete' => 'off'],
+                'attr' => ['autocomplete' => 'off',  'data-lpignore' => 'true'],
             ])
             ->add('profil', EntityType::class, [
                 'class' => Profil::class,
@@ -90,7 +90,7 @@ class PersonneType extends AbstractType
                 'first_options' => ['label' => 'Mot de passe', 'hash_property_path' => 'password'],
                 'second_options' => ['label' => 'Répétez le mot de passe'],
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => ['autocomplete' => 'new-password',  'data-lpignore' => 'true'],
                 'constraints' => [
                     new Length([
                         'min' => 6,

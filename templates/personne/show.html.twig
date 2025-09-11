@@ -42,6 +42,10 @@
                     </tr>
                 {% endif %}
                 <tr>
+                    <th>Tags</th>
+                    <td>{{ personne.tags | join(', ') }}</td>
+                </tr>
+                <tr>
                     <th>Adresse</th>
                     <td>
                         {{ personne.adresse | nl2br }}<br>

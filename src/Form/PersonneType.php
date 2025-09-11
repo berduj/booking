@@ -50,7 +50,6 @@ class PersonneType extends AbstractType
             ->add('email', EmailType::class, ['label' => 'Email', 'required' => false])
             ->add('telephone_mobile', TelType::class, ['label' => 'Téléphone mobile', 'required' => false])
             ->add('telephone_fixe', TelType::class, ['label' => 'Téléphone fixe', 'required' => false])
-
             ->add('fonction', TextType::class, ['label' => 'Fonction', 'required' => false])
             ->add('departementDomaine', EntityType::class, [
                 'label' => 'Département/Domaine',
@@ -60,6 +59,20 @@ class PersonneType extends AbstractType
                     return $er->createQueryBuilder('d')
                         ->andWhere('d.enabled = true')
                         ->orderBy('d.sortable', 'ASC');
+                },
+            ])
+            ->add('tags', EntityType::class, [
+                'label' => 'Tags',
+                'expanded' => true,
+                'multiple' => true,
+                'attr' => ['class' => 'select-multiple-bordered select-multiple-3cols'],
+                'class' => Tag::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('t')
+                        ->andWhere('t.type = :type')
+                        ->setParameter('type', Tag::TYPE_PERSONNE)
+                        ->andWhere('t.enabled = true')
+                        ->orderBy('t.sortable', 'ASC');
                 },
             ])
             ->add('adresse', TextareaType::class, [
@@ -75,20 +88,6 @@ class PersonneType extends AbstractType
             ->add('codePostal', TextType::class, ['label' => 'Code postal', 'required' => false])
             ->add('commune', TextType::class, ['label' => 'Commune', 'required' => false])
             ->add('pays', TextType::class, ['label' => 'Pays', 'required' => false])
-            ->add('tags', EntityType::class, [
-                'label' => 'Tags',
-                'expanded' => true,
-                'multiple' => true,
-                'attr' => ['class' => 'select-multiple-bordered select-multiple-3cols'],
-                'class' => Tag::class,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('t')
-                        ->andWhere('t.type = :type')
-                        ->setParameter('type', Tag::TYPE_PERSONNE)
-                        ->andWhere('t.enabled = true')
-                        ->orderBy('t.sortable', 'ASC');
-                },
-            ])
             ->add('enabled', OuiNonType::class, ['label' => 'Activé']);
 
         if (!$this->security->isGranted('ROLE_USER_EDIT')) {

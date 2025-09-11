@@ -84,6 +84,15 @@ class PersonneType extends AbstractType
                 'label' => 'Profil',
                 'required' => false,
             ])
+
+            ->add('fake_password', PasswordType::class, [
+                'mapped' => false,
+                'label' => false,
+                'attr' => [
+                    'style' => 'display:none',
+                    'autocomplete' => 'off'
+                ]
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'required' => false,

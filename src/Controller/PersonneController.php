@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Personne;
 use App\Entity\Structure;
+use App\Form\PersonneLoginType;
 use App\Form\PersonneType;
 use App\Repository\ContactRepository;
 use App\Repository\PersonneRepository;
@@ -95,6 +96,25 @@ class PersonneController extends AbstractController
         }
 
         return $this->render('personne/edit.html.twig', [
+            'personne' => $personne,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/edit-login/{id}', name: 'app_personne_edit_user', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER_EDIT')]
+    public function editLogin(Request $request, Personne $personne, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(PersonneLoginType::class, $personne);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_personne_show', ['id' => $personne->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('personne/editLogin.html.twig', [
             'personne' => $personne,
             'form' => $form,
         ]);

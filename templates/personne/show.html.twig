@@ -83,7 +83,6 @@
                         </ul>
                     </td>
                 </tr>
-
                 <tr>
                     <th>Création</th>
                     <td>{{ personne.createdByAt }}</td>
@@ -122,6 +121,10 @@
             {% if is_granted('EDIT', personne) %}
                 <a href="{{ path('app_personne_edit', {'id': personne.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
             {% endif %}
+            {% if is_granted('ROLE_USER_EDIT') %}
+                <a href="{{ path('app_personne_edit_user', {'id': personne.id}) }}" class="btn btn-sm btn-edit btn-danger">modifier accès</a>
+            {% endif %}
+
             {{ include('personne/_delete_form.html.twig') }}
         </div>
 

@@ -3,14 +3,12 @@
 {% block title %}Carte des artistes{% endblock %}
 
 {% block body %}
-
-    <h1>
-        <picto class="artiste-picto"></picto>
-        Artistes
-    </h1>
+    <h1><picto class="artiste-picto"></picto>Artistes</h1>
+    <p class="text-end">
+    <a href="{{ path('app_carte_structure') }}" class="btn btn-primary btn-sm mb-3">Carte des structures</a>
+    </p>
     <div id="map"></div>
 {% endblock %}
-
 
 {% block javascripts %}
     {{ parent() }}
@@ -19,25 +17,28 @@
         document.addEventListener("DOMContentLoaded", function (event) {
 
             var icon = L.icon({iconUrl: '/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41]});
-            var map = L.map('map').setView([{{ structure.longitude }}, {{ structure.latitude }} ], 13);
-
+            var map = L.map('map').setView([46.65, -0.35], 7);
 
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            L.marker([{{ structure.longitude }}, {{ structure.latitude }}], {icon: icon}).addTo(map).bindPopup('{{ structure }}')
+            {% for artiste in artistes %}
+            {% if artiste.latitude or artiste.longitude %}
+            L.marker([{{ artiste.longitude }}, {{ artiste.latitude }}], {icon: icon})
+                .addTo(map)
+                .bindPopup('{{ artiste }}<br> {{ artiste.codePostal }} {{ artiste.commune }}<br/><br/>' +
+                '<ul>{% for tag in artiste.tags %}<li>{{ tag }}</li>{% endfor %}</ul>')
+            {% endif %}
+            {% endfor %}
             document.getElementById('nav-map-tab').addEventListener('click', function () {
                 setTimeout(function () {
                     map.invalidateSize();
                 }, 500);
             })
-
             setTimeout(function () {
                 map.invalidateSize();
             }, 500);
         });
-
-
     </script>
 {% endblock %}

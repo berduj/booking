@@ -30,7 +30,6 @@ class CarteController extends AbstractController
     #[IsGranted('ROLE_ARTISTE_VIEW')]
     public function artiste( ArtisteRepository $artisteRepository): Response
     {
-
         return $this->render('carte/artiste.html.twig', [
             'artistes' => $artisteRepository->findBy(['enabled' => true]),
         ]);
@@ -39,7 +38,6 @@ class CarteController extends AbstractController
     #[IsGranted('ROLE_STRUCTURE_VIEW')]
     public function structure( StructureRepository $structureRepository): Response
     {
-
         return $this->render('carte/structure.html.twig', [
             'structures' => $structureRepository->findBy(['enabled' => true]),
         ]);

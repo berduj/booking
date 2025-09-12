@@ -4,6 +4,9 @@
 
 {% block body %}
     <h1><picto class="structure-picto"></picto>Structures</h1>
+    <p class="text-end">
+        <a href="{{ path('app_carte_artiste') }}" class="btn btn-primary btn-sm mb-3">Carte des artistes</a>
+    </p>
     <div id="map"></div>
 {% endblock %}
 
@@ -14,7 +17,7 @@
         document.addEventListener("DOMContentLoaded", function (event) {
 
             var icon = L.icon({iconUrl: '/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41]});
-            var map = L.map('map').setView([46.65, -0.35], 9);
+            var map = L.map('map').setView([46.65, -0.35], 7);
 
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

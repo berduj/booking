@@ -3,17 +3,13 @@
     {% for letter in 'A'..'Z' %}
         {% set route_parameters_page= route_parameters|merge({'page': letter}) %}
         <a href="{{ path(route, route_parameters_page) }}"
-
            class="btn btn-sm btn-outline-primary flex-grow-1 flex-basis-auto text-center  {{ letter == active_letter ?'active' }}"
-           style="min-width: 30px; max-width: 40px;"
-
-
+           style="min-width: 20px; max-width: 30px;"
            aria-current="page">{{ letter }}</a>
     {% endfor %}
     {% set route_parameters_page= route_parameters|merge({'page': '%'}) %}
     <a href="{{ path(route, route_parameters_page) }}"
-       class="btn btn-sm btn-outline-primary flex-grow-1 flex-basis-auto text-center   {{ '%' == active_letter ?'active' }}"
-       style="min-width: 30px; max-width: 40px;"
-
+       class="btn btn-sm btn-outline-primary flex-grow-1 flex-basis-auto text-center {{ '%' == active_letter ?'active' }}"
+       style="min-width: 20px; max-width: 30px;"
        aria-current="page">%</a>
 </div>

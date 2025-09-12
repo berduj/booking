@@ -10,10 +10,12 @@ use App\Form\ArtisteType;
 use App\Repository\ArtisteRepository;
 use App\Repository\ContactRepository;
 use App\Repository\PersonneRepository;
+use App\Service\Geocoder\GeocodeEntityEvent;
 use App\Service\Persister\EnabledDisabledAllPersister;
 use App\Service\Persister\InitialPersister;
 use App\ValueObject\EnabledDisabledAll;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,6 +99,17 @@ class ArtisteController extends AbstractController
             'artiste' => $artiste,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/geocode/{id}', name: 'app_artiste_geocode', methods: ['GET'])]
+    #[IsGranted('EDIT', 'artiste')]
+    public function geocode(Artiste $artiste, EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher): Response
+    {
+        $event = new GeocodeEntityEvent($artiste);
+        $eventDispatcher->dispatch($event);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_artiste_show', ['id' => $artiste->getId()]);
     }
 
     #[Route('/delete/{id}', name: 'app_artiste_delete', methods: ['POST'])]

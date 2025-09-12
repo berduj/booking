@@ -21,8 +21,10 @@ class ArtisteType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, ['label' => 'Nom', 'required' => true])
+            ->add('adresse', TextareaType::class, ['label' => 'Adresse', 'required' => false])
             ->add('codePostal', TextType::class, ['label' => 'Code postal', 'required' => false])
             ->add('commune', TextType::class, ['label' => 'Commune', 'required' => false])
+            ->add('pays', TextType::class, ['label' => 'Pays', 'required' => false])
             ->add('tarif', NumberType::class, ['label' => 'Tarif indicatif', 'required' => false])
             ->add('commentaireTarif', TextareaType::class, ['label' => 'Commentaire tarif', 'required' => false])
             ->add('tags', EntityType::class, [

@@ -7,15 +7,18 @@ namespace App\Entity;
 use App\Entity\Traits\BlameableEntity;
 use App\Entity\Traits\EnableableEntity;
 use App\Repository\ArtisteRepository;
+use App\Service\Geocoder\GeocodableEntity;
+use App\Service\Geocoder\GeocodableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArtisteRepository::class)]
-class Artiste implements \Stringable
+class Artiste implements \Stringable , GeocodableInterface
 {
     use BlameableEntity;
+    use GeocodableEntity;
     use EnableableEntity;
 
     #[ORM\Id]
@@ -52,6 +55,12 @@ class Artiste implements \Stringable
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $commune = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pays = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $adresse = null;
 
     public function __construct()
     {
@@ -185,6 +194,30 @@ class Artiste implements \Stringable
     public function setCommune(?string $commune): static
     {
         $this->commune = $commune;
+
+        return $this;
+    }
+
+    public function getPays(): ?string
+    {
+        return $this->pays;
+    }
+
+    public function setPays(?string $pays): static
+    {
+        $this->pays = $pays;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?string $adresse): static
+    {
+        $this->adresse = $adresse;
 
         return $this;
     }

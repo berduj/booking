@@ -13,6 +13,12 @@
                 Artiste
             </button>
 
+            {% if artiste.longitude or artiste.latitude %}
+                <button class="nav-link" id="nav-map-tab" data-bs-toggle="tab" data-bs-target="#nav-map" type="button" role="tab" aria-controls="nav-map" aria-selected="false">
+                    Carte
+                </button>
+            {% endif %}
+
             <button class="nav-link" id="nav-personnes-tab" data-bs-toggle="tab" data-bs-target="#nav-personnes" type="button" role="tab" aria-controls="nav-personnes" aria-selected="false">
                 Personnes
             </button>
@@ -28,8 +34,11 @@
                     <td>{{ artiste.nom }}</td>
                 </tr>
                 <tr>
-                    <th>Commune</th>
-                    <td>{{ artiste.codePostal }} {{ artiste.commune }}</td>
+                    <th>Adresse</th>
+                    <td>
+                        {{ artiste.adresse | nl2br }}<br>
+                        {{ artiste.codePostal }} {{ artiste.commune }}<br/>
+                        {{ artiste.pays }}</td>
                 </tr>
                 <tr>
                     <th>Description</th>
@@ -42,6 +51,14 @@
                 <tr>
                     <th>Tags</th>
                     <td>{{ artiste.tags | join(', ') }}</td>
+                </tr>
+                <tr>
+                    <th>Coordonnées GPS</th>
+                    <td>{{ artiste.latitude }} ; {{ artiste.longitude }}</td>
+                </tr>
+                <tr>
+                    <th>Score géocodage</th>
+                    <td>{{ artiste.scoreGeocode }}</td>
                 </tr>
                 <tr>
                     <th>Création</th>
@@ -61,10 +78,17 @@
 
             {% if is_granted('EDIT', artiste) %}
                 <a href="{{ path('app_artiste_edit', {'id': artiste.id}) }}" class="btn btn-sm btn-primary btn-edit">modifier</a>
+                <a href="{{ path('app_artiste_geocode', {'id': artiste.id}) }}" class="btn btn-sm btn-primary btn-geo">géocoder</a>
             {% endif %}
 
             {{ include('artiste/_delete_form.html.twig') }}
         </div>
+
+        {% if artiste.longitude or artiste.latitude %}
+            <div class="tab-pane fade" id="nav-map" role="tabpanel" aria-labelledby="nav-map-tab" tabindex="0">
+                <div id="map"></div>
+            </div>
+        {% endif %}
 
         <div class="tab-pane fade" id="nav-personnes" role="tabpanel" aria-labelledby="nav-personnes-tab" tabindex="0">
             <table class="table table-bordered">
@@ -147,6 +171,27 @@
             if (tab) {
                 tab.click()
             }
+            {% endif %}
+
+
+            {% if artiste.longitude or artiste.latitude %}
+            var icon = L.icon({iconUrl: '/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41]});
+            var map = L.map('map').setView([{{ artiste.longitude }}, {{ artiste.latitude }} ], 13);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([{{ artiste.longitude }}, {{ artiste.latitude }}], {icon: icon}).addTo(map).bindPopup('{{ artiste }}')
+            document.getElementById('nav-map-tab').addEventListener('click', function () {
+                setTimeout(function () {
+                    map.invalidateSize();
+                }, 500);
+            })
+
+            setTimeout(function () {
+                map.invalidateSize();
+            }, 500);
             {% endif %}
         });
     </script>

@@ -15,7 +15,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArtisteRepository::class)]
-class Artiste implements \Stringable , GeocodableInterface
+class Artiste implements \Stringable, GeocodableInterface
 {
     use BlameableEntity;
     use GeocodableEntity;

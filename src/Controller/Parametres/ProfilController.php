@@ -64,6 +64,9 @@ class ProfilController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($profil->getId() == 1 && !in_array('ROLE_SUPER_ADMIN', $profil->getRoles(), true)) {
+                $profil->setRoles(array_merge($profil->getRoles(), ['ROLE_SUPER_ADMIN']));
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('app_profil_show', ['id' => $profil->getId()], Response::HTTP_SEE_OTHER);
@@ -79,7 +82,7 @@ class ProfilController extends AbstractController
     #[IsGranted('EDIT', 'profil')]
     public function delete(Request $request, Profil $profil, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$profil->getId(), (string) $request->getPayload()->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $profil->getId(), (string)$request->getPayload()->get('_token'))) {
             $entityManager->remove($profil);
             $entityManager->flush();
         }

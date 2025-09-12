@@ -1,5 +1,5 @@
 {# parametres à passer : route, route_parameters, active_letter #}
-<div class="btn-group mb-3 d-flex flex-wrap ustify-content-center">
+<div class="btn-group mb-3 d-flex flex-wrap ">
     {% for letter in 'A'..'Z' %}
         {% set route_parameters_page= route_parameters|merge({'page': letter}) %}
         <a href="{{ path(route, route_parameters_page) }}"

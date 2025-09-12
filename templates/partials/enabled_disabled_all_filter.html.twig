@@ -1,10 +1,10 @@
 {# parametres à passer : route, route_parameters, filter_status #}
-<div class="btn-group mb-3">
+<div class="btn-group mb-3 flex-wrap">
     {% set route_parameters_page= route_parameters|merge({'status': 'enabled' }) %}
-    <a href="{{ path(route, route_parameters_page) }}" class="btn btn-outline-primary {{ constant('App\\ValueObject\\EnabledDisabledAll::ENABLED') == status.value ?'active' }}" aria-current="page">Activés</a>
+    <a href="{{ path(route, route_parameters_page) }}" class="btn btn-sm btn-outline-primary {{ constant('App\\ValueObject\\EnabledDisabledAll::ENABLED') == status.value ?'active' }}" aria-current="page">Activés</a>
     {% set route_parameters_page= route_parameters|merge({'status': 'disabled' }) %}
-    <a href="{{ path(route, route_parameters_page) }}" class="btn btn-outline-primary {{ constant('App\\ValueObject\\EnabledDisabledAll::DISABLED') == status.value ?'active' }}" aria-current="page">Désactivés</a>
+    <a href="{{ path(route, route_parameters_page) }}" class="btn btn-sm btn-outline-primary {{ constant('App\\ValueObject\\EnabledDisabledAll::DISABLED') == status.value ?'active' }}" aria-current="page">Désactivés</a>
     {% set route_parameters_page= route_parameters|merge({'status': 'all' }) %}
-    <a href="{{ path(route, route_parameters_page) }}" class="btn btn-outline-primary {{ constant('App\\ValueObject\\EnabledDisabledAll::ALL') == status.value ?'active' }}"
+    <a href="{{ path(route, route_parameters_page) }}" class="btn btn-sm btn-outline-primary {{ constant('App\\ValueObject\\EnabledDisabledAll::ALL') == status.value ?'active' }}"
        aria-current="page">Tous</a>
 </div>

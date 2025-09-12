@@ -9,6 +9,7 @@ use App\Entity\Tag;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +21,10 @@ class ArtisteType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, ['label' => 'Nom', 'required' => true])
+            ->add('codePostal', TextType::class, ['label' => 'Code postal', 'required' => false])
+            ->add('commune', TextType::class, ['label' => 'Commune', 'required' => false])
+            ->add('tarif', NumberType::class, ['label' => 'Tarif indicatif', 'required' => false])
+            ->add('commentaireTarif', TextareaType::class, ['label' => 'Commentaire tarif', 'required' => false])
             ->add('tags', EntityType::class, [
                 'label' => 'Tags',
                 'expanded' => true,

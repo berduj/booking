@@ -28,15 +28,21 @@
                     <td>{{ artiste.nom }}</td>
                 </tr>
                 <tr>
+                    <th>Commune</th>
+                    <td>{{ artiste.codePostal }} {{ artiste.commune }}</td>
+                </tr>
+                <tr>
                     <th>Description</th>
                     <td>{{ artiste.description | nl2br }}</td>
                 </tr>
-
+                <tr>
+                    <th>Tarif indicatif</th>
+                    <td>{{ artiste.tarif }}<br/>{{ artiste.commentaireTarif | nl2br }}</td>
+                </tr>
                 <tr>
                     <th>Tags</th>
                     <td>{{ artiste.tags | join(', ') }}</td>
                 </tr>
-
                 <tr>
                     <th>Création</th>
                     <td>{{ artiste.createdByAt }}</td>

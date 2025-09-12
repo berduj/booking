@@ -41,6 +41,18 @@ class Artiste implements \Stringable
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column]
+    private ?int $tarif = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $commentaireTarif = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $codePostal = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $commune = null;
+
     public function __construct()
     {
         $this->personnes = new ArrayCollection();
@@ -125,6 +137,54 @@ class Artiste implements \Stringable
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getTarif(): ?int
+    {
+        return $this->tarif;
+    }
+
+    public function setTarif(int $tarif): static
+    {
+        $this->tarif = $tarif;
+
+        return $this;
+    }
+
+    public function getCommentaireTarif(): ?string
+    {
+        return $this->commentaireTarif;
+    }
+
+    public function setCommentaireTarif(?string $commentaireTarif): static
+    {
+        $this->commentaireTarif = $commentaireTarif;
+
+        return $this;
+    }
+
+    public function getCodePostal(): ?string
+    {
+        return $this->codePostal;
+    }
+
+    public function setCodePostal(?string $codePostal): static
+    {
+        $this->codePostal = $codePostal;
+
+        return $this;
+    }
+
+    public function getCommune(): ?string
+    {
+        return $this->commune;
+    }
+
+    public function setCommune(?string $commune): static
+    {
+        $this->commune = $commune;
 
         return $this;
     }

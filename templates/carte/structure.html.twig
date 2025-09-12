@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Carte des structures{% endblock %}
+
+{% block body %}
+    <h1><picto class="structure-picto"></picto>Structures</h1>
+    <div id="map"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+
+        document.addEventListener("DOMContentLoaded", function (event) {
+
+            var icon = L.icon({iconUrl: '/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41]});
+            var map = L.map('map').setView([46.65, -0.35], 9);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            {% for structure in structures %}
+            {% if structure.latitude or structure.longitude %}
+            L.marker([{{ structure.longitude }}, {{ structure.latitude }}], {icon: icon})
+                .addTo(map)
+                .bindPopup('{{ structure }}<br> {{ structure.codePostal }} {{ structure.commune }}<br/><br/>' +
+                '<ul>{% for tag in structure.tags %}<li>{{ tag }}</li>{% endfor %}</ul>')
+            {% endif %}
+            {% endfor %}
+            document.getElementById('nav-map-tab').addEventListener('click', function () {
+                setTimeout(function () {
+                    map.invalidateSize();
+                }, 500);
+            })
+            setTimeout(function () {
+                map.invalidateSize();
+            }, 500);
+        });
+    </script>
+{% endblock %}

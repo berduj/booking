@@ -3,7 +3,10 @@
 {% block title %}Carte des structures{% endblock %}
 
 {% block body %}
-    <h1><picto class="structure-picto"></picto>Carte des Structures</h1>
+    <h1>
+        <picto class="structure-picto"></picto>
+        Carte des Structures
+    </h1>
     <p class="text-end">
         <a href="{{ path('app_carte_artiste') }}" class="btn btn-primary btn-sm mb-3">Voir la carte des artistes</a>
     </p>
@@ -28,7 +31,10 @@
             L.marker([{{ structure.longitude }}, {{ structure.latitude }}], {icon: icon})
                 .addTo(map)
                 .bindPopup('{{ structure }}<br> {{ structure.codePostal }} {{ structure.commune }}<br/><br/>' +
-                '<ul>{% for tag in structure.tags %}<li>{{ tag }}</li>{% endfor %}</ul>')
+                    '<ul>{% for tag in structure.tags %}<li>{{ tag }}</li>{% endfor %}</ul>',
+                    {
+                        offset: L.point(0, -20)
+                    })
             {% endif %}
             {% endfor %}
             document.getElementById('nav-map-tab').addEventListener('click', function () {

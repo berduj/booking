@@ -7,6 +7,8 @@ import {FrontAutoComplete} from 'frontTools';
 import {FrontSortable} from "frontTools";
 
 import L from "leaflet"
+import 'leaflet.markercluster';
+
 
 document.addEventListener("DOMContentLoaded", function (event) {
 

@@ -51,8 +51,9 @@ class Geocoder
         $this->copyProperty($properties, $geocodedAdresse, 'city', 'commune');
         $this->copyProperty($properties, $geocodedAdresse, 'score', 'score');
 
-        $this->copyProperty($geometry['coordinates'], $geocodedAdresse, '0', 'latitude');
-        $this->copyProperty($geometry['coordinates'], $geocodedAdresse, '1', 'longitude');
+        $this->copyProperty($geometry['coordinates'], $geocodedAdresse, '0', 'longitude');
+        $this->copyProperty($geometry['coordinates'], $geocodedAdresse, '1', 'latitude');
+
 
         return $geocodedAdresse;
     }

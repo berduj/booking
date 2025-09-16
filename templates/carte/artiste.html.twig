@@ -28,7 +28,7 @@
 
             {% for artiste in artistes %}
             {% if artiste.latitude or artiste.longitude %}
-            L.marker([{{ artiste.longitude }}, {{ artiste.latitude }}], {icon: icon})
+            L.marker([{{ artiste.latitude }}, {{ artiste.longitude }}], {icon: icon})
                 .addTo(map)
                 .bindPopup('{{ artiste }}<br> {{ artiste.codePostal }} {{ artiste.commune }}<br/><br/>' +
                     '<ul>{% for tag in artiste.tags %}<li>{{ tag }}</li>{% endfor %}</ul>',

@@ -176,13 +176,13 @@
 
             {% if artiste.longitude or artiste.latitude %}
             var icon = L.icon({iconUrl: '/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41]});
-            var map = L.map('map').setView([{{ artiste.longitude }}, {{ artiste.latitude }} ], 13);
+            var map = L.map('map').setView([{{ artiste.latitude }}, {{ artiste.longitude }} ], 13);
 
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            L.marker([{{ artiste.longitude }}, {{ artiste.latitude }}], {icon: icon}).addTo(map).bindPopup('{{ artiste }}')
+            L.marker([{{ artiste.latitude }}, {{ artiste.longitude }}], {icon: icon}).addTo(map).bindPopup('{{ artiste }}')
             document.getElementById('nav-map-tab').addEventListener('click', function () {
                 setTimeout(function () {
                     map.invalidateSize();

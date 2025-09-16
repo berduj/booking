@@ -49,4 +49,11 @@ return [
     'chart.js' => [
         'version' => '3.9.1',
     ],
+    'leaflet.markercluster' => [
+        'version' => '1.5.3',
+    ],
+    'leaflet.markercluster/dist/MarkerCluster.min.css' => [
+        'version' => '1.5.3',
+        'type' => 'css',
+    ],
 ];

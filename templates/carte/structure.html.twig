@@ -15,6 +15,10 @@
 
 {% block javascripts %}
     {{ parent() }}
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
+
     <script type="module">
 
         document.addEventListener("DOMContentLoaded", function (event) {
@@ -26,22 +30,27 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
+
+            var markers = L.markerClusterGroup({ disableClusteringAtZoom: 13});
+
             {% for structure in structures %}
             {% if structure.latitude or structure.longitude %}
-            L.marker([{{ structure.longitude }}, {{ structure.latitude }}], {icon: icon})
-                .addTo(map)
-                .bindPopup('{{ structure }}<br> {{ structure.codePostal }} {{ structure.commune }}<br/><br/>' +
-                    '<ul>{% for tag in structure.tags %}<li>{{ tag }}</li>{% endfor %}</ul>',
-                    {
-                        offset: L.point(0, -20)
-                    })
+
+            var marker = L.marker([{{ structure.latitude }}, {{ structure.longitude }}], {icon: icon})
+
+            marker.bindPopup('{{ structure }}<br> {{ structure.codePostal }} {{ structure.commune }}<br/><br/>' +
+                '<ul>{% for tag in structure.tags %}<li>{{ tag }}</li>{% endfor %}</ul>',
+                {
+                    offset: L.point(0, -20)
+                })
+            markers.addLayer(marker);
+
+
             {% endif %}
             {% endfor %}
-            document.getElementById('nav-map-tab').addEventListener('click', function () {
-                setTimeout(function () {
-                    map.invalidateSize();
-                }, 500);
-            })
+
+
+            map.addLayer(markers);
             setTimeout(function () {
                 map.invalidateSize();
             }, 500);

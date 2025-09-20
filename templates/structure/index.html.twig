@@ -14,6 +14,27 @@
         <div class="col-6"><a href="{{ path('app_structure_new') }}" class="btn btn-primary btn-add btn-sm btn-add">ajouter</a></div>
     {% endif %}
 
+    {% if is_granted('ROLE_STRUCTURE_CREATE') %}
+        <form action="{{ path('app_structure_add_siret') }}" method="post">
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6 creation-siret">
+                    <p>Créer une structure à partir de son SIRET :</p>
+                    <div class="row">
+                        <div class="col-10">
+                            <input class="form-control form-control" type="text" name="siret" id="siret" value="" required placeholder="saisissez un siret">
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-sm btn-primary btn-add" type="submit">créer</button>
+                        </div>
+                    </div>
+                    <p class="center">Rechercher sur : <a href="https://pappers.fr" target="_blank">pappers.fr</a>&nbsp;<a href="https://www.societe.com" target="_blank">www.societe.com</a></p>
+                </div>
+            </div>
+        </form>
+    {% endif %}
+
+
     <table class="table">
         <thead>
         <tr>

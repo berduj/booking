@@ -141,7 +141,7 @@ class Structure implements \Stringable, GeocodableInterface
 
     public function setSiret(?string $siret): static
     {
-        $this->siret = $siret;
+        $this->siret = preg_replace('/\s+/', '', $siret);
 
         return $this;
     }
@@ -200,7 +200,7 @@ class Structure implements \Stringable, GeocodableInterface
             return $this->nom;
         }
 
-        return (string) $this->raisonSociale;
+        return (string)$this->raisonSociale;
     }
 
     /**
@@ -382,7 +382,7 @@ class Structure implements \Stringable, GeocodableInterface
         $array = $this->contactInterlocuteurs->toArray();
         usort($array, function (ContactInterlocuteur $a, ContactInterlocuteur $b): int {
             if ($a->getContact() and $b->getContact()) {
-                return (int) ($a->getContact()->getDate() < $b->getContact()->getDate());
+                return (int)($a->getContact()->getDate() < $b->getContact()->getDate());
             }
 
             return 1;

@@ -40,7 +40,7 @@ class StructureController extends AbstractController
             $enabledDisabledAllPersister->set(new EnabledDisabledAll($status), 'structure');
         }
 
-        $page = $initialPersister->get('structure', 'A');
+        $page = $initialPersister->get('structure', '%');
         $status = $enabledDisabledAllPersister->get('structure', EnabledDisabledAll::ENABLED);
 
         return $this->render('structure/index.html.twig', [
